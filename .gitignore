@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+# Exportações do cliente nunca entram no repositório (hostnames, IPs e nomes de serviço).
+inventario*.json
+private/
