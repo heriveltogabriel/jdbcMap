@@ -7,7 +7,7 @@ export function esc(value: unknown): string {
 export const STATUS_LABEL: Record<Status, string> = {
   ok: 'Certificado',
   legacy: 'Certificado, fora de suporte',
-  bad: 'Não listado pela Oracle',
+  bad: 'Sem certificação da Oracle',
   nv: 'Não verificado',
   unk: 'Banco sem versão',
 };

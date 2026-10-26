@@ -3,7 +3,8 @@ import type { Compat, DbVersion, DriverLine } from '../domain/types';
 /**
  * Matriz de certificação driver × banco, das tabelas de interoperabilidade dos
  * "JDBC Developer's Guide" da Oracle (19c, 21c e 26ai). Vale o valor da doc mais recente.
- * ok = "Yes" · legacy = "Was" (suportado, mas uma das versões saiu do suporte) · bad = a Oracle não lista · nv = não verificado.
+ * ok = "Yes" · legacy = "Was" (suportado, mas uma das versões saiu do suporte) · bad = sem certificação da Oracle (não listado ou "No";
+ * o driver pode até conectar, mas a Oracle não o certifica nem dá suporte) · nv = não verificado.
  */
 export const RULES_INFO = {
   readAt: '2026-10-26',
@@ -12,7 +13,7 @@ export const RULES_INFO = {
     'https://docs.oracle.com/en/database/oracle/oracle-database/21/jjdbc/JDBC-getting-started.html',
     'https://docs.oracle.com/en/database/oracle/oracle-database/26/jjdbc/JDBC-getting-started.html',
   ],
-  note: 'A doc do 23ai só foi lida por resumo de busca; as células marcadas em INFERRED não constam literalmente nas docs lidas.',
+  note: 'O guia do 23ai agora redireciona para o do 26ai (23ai e 26ai são a mesma linha de produto, 26ai = 23.26+). As células em INFERRED não constam literalmente nas docs lidas.',
 } as const;
 
 export const DB_VERSIONS: readonly DbVersion[] = ['11g', '12c', '18c', '19c', '21c', '23ai', '26ai'];
@@ -25,15 +26,15 @@ export const MATRIX: Record<DriverLine, readonly Compat[]> = {
   '18': ['legacy', 'legacy', 'legacy', 'legacy', 'legacy', 'bad', 'bad'],
   '19': ['legacy', 'legacy', 'legacy', 'ok', 'ok', 'ok', 'ok'],
   '21': ['bad', 'legacy', 'legacy', 'ok', 'ok', 'ok', 'ok'],
-  '23': ['bad', 'bad', 'bad', 'ok', 'ok', 'ok', 'nv'],
-  '26': ['bad', 'bad', 'bad', 'ok', 'ok', 'nv', 'ok'],
+  '23': ['bad', 'bad', 'bad', 'ok', 'ok', 'ok', 'ok'],
+  '26': ['bad', 'bad', 'bad', 'ok', 'ok', 'ok', 'ok'],
 };
 
 /** Cruzamentos que as docs lidas não trazem literalmente (leitura própria). Chave: `${linha}|${banco}`. */
 export const INFERRED: ReadonlySet<string> = new Set([
   '11.2|11g', '11.2|12c', '11.2|18c', '11.2|19c',
   '12.1|11g', '12.2|11g', '18|11g', '19|11g',
-  '19|23ai', '21|23ai', '23|19c', '23|21c', '23|23ai',
+  '19|23ai', '21|23ai', '23|19c', '23|21c', '23|23ai', '23|26ai', '26|23ai',
 ]);
 
 export function compatOf(line: DriverLine, db: DbVersion): Compat {

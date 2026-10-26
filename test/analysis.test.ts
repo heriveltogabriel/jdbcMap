@@ -59,7 +59,9 @@ describe('matriz de compatibilidade', () => {
     expect(compatOf('26', '19c')).toBe('ok');
     expect(compatOf('11.2', '19c')).toBe('legacy');
     expect(compatOf('11.2', '21c')).toBe('bad');
-    expect(compatOf('23', '26ai')).toBe('nv');
+    expect(compatOf('23', '26ai')).toBe('ok');
+    expect(compatOf('26', '23ai')).toBe('ok');
+    expect(compatOf('21', '11g')).toBe('bad');
   });
   it('cada linha da matriz tem uma entrada por versão de banco', () => {
     for (const cells of Object.values(MATRIX)) expect(cells).toHaveLength(7);
@@ -93,7 +95,7 @@ describe('suggest', () => {
   it('escolhe o jar pelo JDK quando o banco exige driver novo', () => {
     const text = suggest(fact({ driverVersion: '11.2.0.4.0', jar: 'ojdbc6', jdk: '17.0.7' }), { dbscan1: '21c' });
     expect(text).toMatch(/ojdbc17/);
-    expect(text).toMatch(/Trocar o driver/);
+    expect(text).toMatch(/Sem certificação/);
   });
   it('não sugere quando já está certificado', () => {
     expect(suggest(fact({}), { dbscan1: '19c' })).toBeNull();

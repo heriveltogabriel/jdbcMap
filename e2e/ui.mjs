@@ -78,9 +78,9 @@ check((await page.locator('.row-tgt').count()) > 0, 'matriz: selecionar a linha 
 await page.fill('#catalog', 'dbscan1.example.net;21c\ndbscan2.example.net;19c');
 await page.click('[data-action="catalog-apply"]');
 await page.waitForFunction(() => document.querySelector('#main .msg.ok')?.textContent?.includes('Catálogo salvo'));
-check((await text('#kpis')).includes('não listadas'), 'catálogo aplicado calcula a compatibilidade', await text('#kpis'));
+check((await text('#kpis')).includes('sem certificação'), 'catálogo aplicado calcula a compatibilidade', await text('#kpis'));
 await page.click('[data-tab="plan"]');
-check((await text('#main')).includes('Trocar o driver'), 'plano de migração sugere a troca do driver');
+check((await text('#main')).includes('Sem certificação'), 'plano de migração sugere a troca do driver');
 
 await page.reload();
 await page.waitForSelector('#kpis .kpi');
@@ -107,7 +107,7 @@ await page.waitForSelector('#drop');
 await page.setInputFiles('#file', file1);
 await page.click('[data-action="import-confirm"]');
 await page.waitForSelector('svg[aria-label="Mapa de fluxo"]');
-check((await text('#kpis')).includes('não listadas'), 'o catálogo sobrevive à limpeza do inventário');
+check((await text('#kpis')).includes('sem certificação'), 'o catálogo sobrevive à limpeza do inventário');
 
 const sample = process.env.JDBCMAP_SAMPLE;
 if (sample && existsSync(sample)) {

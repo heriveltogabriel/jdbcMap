@@ -28,7 +28,7 @@ Cada limpeza pede uma segunda confirmação.
 
 ## Regras como dados
 
-- `src/rules/compat.ts`: matriz driver × banco e linhas por jar. Vem dos JDBC Developer's Guide 19c, 21c e 26ai da Oracle (lidos em 2026-10-26). Valores: certificado (Yes), certificado com uma versão fora de suporte (Was), não listado pela Oracle e não verificado. As células em `INFERRED` não constam literalmente nas docs lidas; a doc do 23ai só foi lida por resumo. **Conferir antes de tratar como regra definitiva.**
+- `src/rules/compat.ts`: matriz driver × banco e linhas por jar. Vem dos JDBC Developer's Guide 19c, 21c e 26ai da Oracle (lidos em 2026-10-26). Valores: certificado (Yes), certificado com uma versão fora de suporte (Was) e **sem certificação** (✕). O ✕ não quer dizer que o driver não conecta: a Oracle só certifica os bancos que ela ainda suporta, então um driver novo contra um banco antigo aparece como ✕ embora costume funcionar, sem suporte. O guia do 23ai agora redireciona para o do 26ai (23ai e 26ai são a mesma linha de produto, 26ai = 23.26+). As células em `INFERRED` (asterisco na tela) não constam literalmente nas docs lidas. A FAQ de JDBC da Oracle bloqueia leitura automática (403) e ainda deve ser conferida à mão.
 - `src/rules/env.ts`: o ambiente vem da letra na 5ª posição do hostname (`n121d004775` → `d` = Desenvolvimento, `h` = Homologação, `p` = Produção). A regra é editável na aba de dados e vale sem reimportar. O ambiente cadastrado pelo cliente é guardado só para apontar divergências.
 
 ## Testes

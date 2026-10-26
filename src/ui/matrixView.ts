@@ -8,7 +8,7 @@ const SYMBOL = { ok: '✓', legacy: '◐', bad: '✕', nv: '?' } as const;
 const TITLE = {
   ok: 'Certificado (Yes)',
   legacy: 'Suportado, fora de suporte (Was)',
-  bad: 'Não listado pela Oracle',
+  bad: 'Sem certificação da Oracle: a combinação não consta como certificada. Pode até conectar, mas a Oracle não dá suporte',
   nv: 'Não verificado: as docs lidas não cobrem esta combinação',
 } as const;
 
@@ -31,7 +31,7 @@ export function renderMatrix(state: State, facts: Fact[]): string {
   }
 
   let html = `<h3>Quais bancos cada driver atende, onde você está hoje e para onde dá para migrar</h3>
-  <div class="legend"><span><b style="color:var(--ok)">✓</b> certificado pela Oracle</span><span><b style="color:var(--legacy)">◐</b> funciona, mas o driver ou o banco já saiu do suporte</span><span><b style="color:var(--bad)">✕</b> a Oracle não lista</span><span><b style="color:var(--mute)">?</b> não verificado</span><span><b style="background:var(--ink);color:var(--bg);border-radius:999px;padding:0 7px">n</b> conexões suas nessa combinação</span></div>
+  <div class="legend"><span><b style="color:var(--ok)">✓</b> certificado pela Oracle</span><span><b style="color:var(--legacy)">◐</b> funciona, mas o driver ou o banco já saiu do suporte</span><span><b style="color:var(--bad)">✕</b> sem certificação da Oracle (pode conectar, mas sem suporte)</span><span><b style="color:var(--mute)">?</b> não verificado</span><span><b style="background:var(--ink);color:var(--bg);border-radius:999px;padding:0 7px">n</b> conexões suas nessa combinação</span></div>
   <table class="mx"><tr><th>Driver</th>${DB_VERSIONS.map((db) => `<th style="text-align:center">Oracle ${esc(db)}</th>`).join('')}<th style="text-align:center">Conexões hoje</th><th>Migrar para</th></tr>`;
   for (const row of MATRIX_ROWS) {
     const isSelected = selected === row.id;

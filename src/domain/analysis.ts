@@ -101,7 +101,7 @@ export function suggest(fact: Fact, catalog: Catalog): string | null {
   if (status === 'nv') return `Combinação não verificada nas docs da Oracle (driver ${line} com banco ${db}). Conferir antes de decidir.`;
   const high = db === '21c' || db === '23ai' || db === '26ai';
   const target = high ? `${jar} 26ai/23.26+ (certificado com 19c, 21c e 26ai)` : 'ojdbc8 19.x (certificado com 19c, 21c e 26ai)';
-  if (status === 'bad') return `Trocar o driver: a Oracle não lista este driver com o banco ${db}. Usar ${target}.`;
+  if (status === 'bad') return `Sem certificação: a Oracle não certifica este driver com o banco ${db} (pode conectar, mas sem suporte). Usar ${target}.`;
   return `Combinação em “Was” (uma versão fora do suporte). Alinhar para ${target}${/^(11|12|18)/.test(db) ? ' e planejar a atualização do banco' : ''}.`;
 }
 

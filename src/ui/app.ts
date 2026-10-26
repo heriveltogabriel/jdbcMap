@@ -331,7 +331,7 @@ export class App {
     const known = Object.keys(s.catalog).length > 0;
     box.innerHTML = `<div class="kpi"><b>${stats.oracleDatasources}</b><span>datasources Oracle</span></div>
       <div class="kpi"><b>${percent(stats.oracleWithDriver, stats.oracleDatasources)}</b><span>com driver resolvido</span></div>
-      ${known ? `<div class="kpi ok"><b>${counts.ok}</b><span>certificadas</span></div><div class="kpi warn"><b>${counts.legacy}</b><span>fora de suporte</span></div><div class="kpi bad"><b>${counts.bad}</b><span>não listadas</span></div>` : '<div class="kpi"><b>0</b><span>bancos com versão</span></div>'}`;
+      ${known ? `<div class="kpi ok"><b>${counts.ok}</b><span>certificadas</span></div><div class="kpi warn"><b>${counts.legacy}</b><span>fora de suporte</span></div><div class="kpi bad"><b>${counts.bad}</b><span>sem certificação</span></div>` : '<div class="kpi"><b>0</b><span>bancos com versão</span></div>'}`;
   }
 
   private renderAside(): void {
@@ -353,7 +353,7 @@ export class App {
       const banner = Object.keys(s.catalog).length === 0
         ? '<div class="banner"><b>Versão do banco ausente.</b> A exportação traz host, porta e serviço, mas não a versão. Cole o catálogo ao lado para ver a camada de compatibilidade.</div>'
         : s.catalogSimulated ? '<div class="banner sim"><b>Versões de banco simuladas</b> para demonstração; não foram salvas.</div>' : '';
-      main.innerHTML = `${notice}${banner}<div class="legend"><span><i style="background:var(--ok)"></i>certificado (Yes)</span><span><i style="background:var(--legacy)"></i>certificado, mas uma versão saiu do suporte (Was)</span><span><i style="background:var(--bad)"></i>não listado pela Oracle</span><span><i style="background:var(--neu)"></i>versão do banco desconhecida</span><span class="mut">clique em um nó para destacar o caminho</span></div>
+      main.innerHTML = `${notice}${banner}<div class="legend"><span><i style="background:var(--ok)"></i>certificado (Yes)</span><span><i style="background:var(--legacy)"></i>certificado, mas uma versão saiu do suporte (Was)</span><span><i style="background:var(--bad)"></i>sem certificação da Oracle</span><span><i style="background:var(--neu)"></i>versão do banco desconhecida</span><span class="mut">clique em um nó para destacar o caminho</span></div>
         <div class="card" id="stage"></div><div class="card" style="margin-top:12px" id="detail"></div>`;
       const stage = main.querySelector('#stage') as HTMLElement;
       const render = renderMap(s, facts, Math.max(900, stage.clientWidth - 24));
