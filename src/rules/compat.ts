@@ -12,7 +12,11 @@ export const RULES_INFO = {
     'https://docs.oracle.com/en/database/oracle/oracle-database/19/jjdbc/JDBC-getting-started.html',
     'https://docs.oracle.com/en/database/oracle/oracle-database/21/jjdbc/JDBC-getting-started.html',
     'https://docs.oracle.com/en/database/oracle/oracle-database/26/jjdbc/JDBC-getting-started.html',
+    'https://docs.oracle.com/en/middleware/standalone/weblogic-server/15.1.1/jdbca/Using_OracleDatabase.html',
   ],
+  /** Fonte e limite das regras do WebLogic (JDK e banco por versão do servidor), que não vêm da matriz driver × banco. */
+  weblogicSource: 'My Oracle Support, aba Certifications (exportação em CSV, 10.3.6 a 15.1.1), em src/rules/weblogic.json.',
+  weblogicLimit: 'Vale para o JDK e o banco Oracle de cada versão. O MOS não certifica o jar ojdbc por versão do WebLogic; a verificação do driver é pelo JDK que ele exige e pelo banco. Versões fora dessa lista ficam sem aviso.',
   note: 'O guia do 23ai agora redireciona para o do 26ai (23ai e 26ai são a mesma linha de produto, 26ai = 23.26+). As células em INFERRED não constam literalmente nas docs lidas.',
 } as const;
 
@@ -57,16 +61,37 @@ export const MATRIX_ROWS: readonly MatrixRow[] = [
   { id: 'ojdbc7|12.1', jar: 'ojdbc7', line: '12.1', release: '12.1', jdk: 'JDK 7 e 8' },
   { id: 'ojdbc8|12.2', jar: 'ojdbc8', line: '12.2', release: '12.2', jdk: 'JDK 8' },
   { id: 'ojdbc8|18', jar: 'ojdbc8', line: '18', release: '18.3', jdk: 'JDK 8 a 11' },
-  { id: 'ojdbc8|19', jar: 'ojdbc8', line: '19', release: '19.x', jdk: 'JDK 8 a 21' },
-  { id: 'ojdbc10|19', jar: 'ojdbc10', line: '19', release: '19.x', jdk: 'JDK 11 a 21' },
+  { id: 'ojdbc8|19', jar: 'ojdbc8', line: '19', release: '19.x', jdk: 'JDK 8, 11, 17, 19 e 21' },
+  { id: 'ojdbc10|19', jar: 'ojdbc10', line: '19', release: '19.x', jdk: 'JDK 11, 17, 19 e 21' },
   { id: 'ojdbc8|21', jar: 'ojdbc8', line: '21', release: '21.x', jdk: 'JDK 8 e 11' },
-  { id: 'ojdbc11|21', jar: 'ojdbc11', line: '21', release: '21.x', jdk: 'JDK 11 a 19' },
+  { id: 'ojdbc11|21', jar: 'ojdbc11', line: '21', release: '21.x', jdk: 'JDK 11, 17 e 19' },
   { id: 'ojdbc8|23', jar: 'ojdbc8', line: '23', release: '23ai', jdk: 'JDK 8 e 11' },
   { id: 'ojdbc11|23', jar: 'ojdbc11', line: '23', release: '23ai', jdk: 'JDK 11' },
+  { id: 'ojdbc17|23', jar: 'ojdbc17', line: '23', release: '23.6+', jdk: 'JDK 17 a 21' },
   { id: 'ojdbc8|26', jar: 'ojdbc8', line: '26', release: '26ai (23.26+)', jdk: 'JDK 8 e 11' },
   { id: 'ojdbc11|26', jar: 'ojdbc11', line: '26', release: '26ai (23.26+)', jdk: 'JDK 11' },
   { id: 'ojdbc17|26', jar: 'ojdbc17', line: '26', release: '26ai (23.26+)', jdk: 'JDK 17 a 21' },
 ];
 
+/**
+ * Avisos do WebLogic Server (docs 15.1.1 e blog da Oracle). A matriz completa do WebLogic fica no
+ * Oracle Certification Matrix / My Oracle Support (exige login), então aqui só entra o que é público.
+ */
+export const WEBLOGIC_NOTES: readonly string[] = [
+  'WebLogic 14.1.1 vem com o driver 19.3; 14.1.2 e 15.1.1 vêm com o 23ai.',
+  'WebLogic 14.1.2 em diante não suporta mais Oracle Database 12c.',
+  'WebLogic 14.1.1, 14.1.2 e 15.1.1 são certificados com o Oracle AI Database 26ai.',
+];
+
 /** O ojdbc8 não implementa o JDBC 4.3 (nota do guia 26ai). */
 export const JAR_NOTES: Record<string, string> = { ojdbc8: 'só JDBC 4.2' };
+
+/** Nível da especificação JDBC que cada jar implementa (JDBC 4.2 é o do Java 8, 4.3 do Java 9 em diante). */
+export const JAR_JDBC: Record<string, string> = {
+  ojdbc6: '4.0',
+  ojdbc7: '4.1',
+  ojdbc8: '4.2',
+  ojdbc10: '4.3',
+  ojdbc11: '4.3',
+  ojdbc17: '4.3',
+};

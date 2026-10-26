@@ -6,6 +6,8 @@ import { emptyFilters } from '../domain/analysis';
 import {
   clearCatalog, clearInventory, deleteSnapshot, getCatalog, getSettings, getSnapshot, listSnapshots, openStore, resetSettings, saveCatalog, saveSettings, saveSnapshot, type Store,
 } from '../storage/db';
+import pkg from '../../package.json';
+import { RULES_INFO } from '../rules/compat';
 import { initialState, type State, type Tab } from '../state';
 import { renderData } from './dataView';
 import { renderDetail } from './detailView';
@@ -30,7 +32,7 @@ export class App {
   constructor(private root: HTMLElement) {}
 
   async start(): Promise<void> {
-    this.root.innerHTML = `<header><div><h1>JdbcMap</h1><div class="sub" id="subtitle"></div></div><div class="kpis" id="kpis"></div></header>
+    this.root.innerHTML = `<header><div><h1>JdbcMap <span class="ver" title="Versão do app · data da leitura das docs da Oracle">v${esc(pkg.version)} · regras de ${esc(RULES_INFO.readAt)}</span></h1><div class="sub" id="subtitle"></div></div><div class="kpis" id="kpis"></div></header>
       <div class="tabs" id="tabs"></div><main id="layout"><aside id="aside"></aside><section id="main"></section></main><div class="tip" id="tip"></div>`;
     this.bind();
     try {

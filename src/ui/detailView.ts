@@ -1,6 +1,6 @@
 import { statusOf, suggest } from '../domain/analysis';
 import { shortHost } from '../domain/analysis';
-import { jdkMajor } from '../domain/analysis';
+import { embeddedDriverNote, jdkMajor, serverIssue } from '../domain/analysis';
 import type { Catalog, Fact } from '../domain/types';
 import { esc, pill } from './html';
 
@@ -21,10 +21,12 @@ export function renderDetail(facts: Fact[], catalog: Catalog, focused: boolean):
   for (const { fact, hosts } of list.slice(0, LIMIT)) {
     const status = statusOf(fact, catalog);
     const advice = suggest(fact, catalog);
+    const issue = serverIssue(fact, catalog);
+    const note = embeddedDriverNote(fact);
     const dbVersion = catalog[shortHost(fact.dbHost) ?? ''];
     html += `<tr><td>${esc(fact.name ?? '—')}<div class="mut">${esc(fact.host ?? '')}${hosts.size > 1 ? ` +${hosts.size - 1}` : ''}</div></td>
       <td>${esc(fact.server === 'Sem servidor' ? '—' : `${fact.server} ${fact.serverVersion}`)}</td>
-      <td>${esc(fact.driverVersion ? `${fact.jar ?? ''} ${fact.driverVersion}` : 'não resolvido')}</td><td>${jdkMajor(fact.jdk) ?? '—'}</td>
+      <td>${esc(fact.driverVersion ? `${fact.jar ?? ''} ${fact.driverVersion}` : 'não resolvido')}${note ? `<div class="mut" title="${esc(note)}">driver trocado</div>` : ''}</td><td>${jdkMajor(fact.jdk) ?? '—'}${issue ? ` <span class="pill bad" title="${esc(issue)}">fora do certificado</span>` : ''}</td>
       <td>${esc(shortHost(fact.dbHost) ?? '—')}${dbVersion ? ` · ${esc(dbVersion)}` : ''}<div class="mut">${esc(fact.dbName ?? '')}</div></td>
       <td>${pill(status)}</td><td>${advice ? esc(advice) : '<span class="mut">—</span>'}</td></tr>`;
   }

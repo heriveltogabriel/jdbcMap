@@ -1,4 +1,5 @@
 import { DB_VERSIONS, DRIVER_LINES, MATRIX_ROWS, compatOf, type MatrixRow } from '../rules/compat';
+import { certifiedDbs, weblogicRule } from '../rules/weblogic';
 import type { Catalog, DbVersion, DriverLine, Fact, Status } from './types';
 
 /** Linha do driver Oracle a partir da versão do jar; null quando não é um driver Oracle reconhecível. */
@@ -13,8 +14,13 @@ export function driverLine(version: string | null | undefined): DriverLine | nul
   if (major === 19) return '19';
   if (major === 21) return '21';
   if (major === 23) return (minor ?? 0) >= 26 ? '26' : '23';
-  if (major > 23) return '26';
+  if (major > 23 && major <= 29) return '26';
   return null;
+}
+
+/** Linha do driver da conexão; só o driver Oracle entra (PostgreSQL 42.x, MySQL 8.x etc. não têm linha na matriz). */
+export function factLine(fact: Pick<Fact, 'dbType' | 'driverVersion'>): DriverLine | null {
+  return fact.dbType === 'Oracle' ? driverLine(fact.driverVersion) : null;
 }
 
 /** Versão principal do JDK (1.8.0_251 → 8, 17.0.7 → 17). */
@@ -22,6 +28,52 @@ export function jdkMajor(version: string | null | undefined): number | null {
   if (!version) return null;
   const match = /^1\.(\d+)/.exec(version) ?? /^(\d+)/.exec(version);
   return match ? Number(match[1]) : null;
+}
+
+const isWls12214 = (fact: Pick<Fact, 'server' | 'serverVersion'>): boolean => fact.server === 'WebLogic' && fact.serverVersion.startsWith('12.2.1.4');
+
+/** Números de um JDK para comparar (1.8.0_251 → [8, 0, 251], 17.0.7 → [17, 0, 7]). */
+function jdkParts(version: string): number[] {
+  const numbers = version.split(/[._]/).map((part) => parseInt(part, 10)).filter((n) => !Number.isNaN(n));
+  return numbers[0] === 1 ? numbers.slice(1) : numbers;
+}
+
+function compareParts(a: number[], b: number[]): number {
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    const diff = (a[i] ?? 0) - (b[i] ?? 0);
+    if (diff !== 0) return diff;
+  }
+  return 0;
+}
+
+/** Problemas do servidor com o JDK e com o banco, segundo a certificação do My Oracle Support (src/rules/weblogic.json), ou null. */
+export function serverIssue(fact: Pick<Fact, 'server' | 'serverVersion' | 'jdk' | 'dbHost'>, catalog: Catalog = {}): string | null {
+  if (fact.server !== 'WebLogic') return null;
+  const rule = weblogicRule(fact.serverVersion);
+  if (!rule) return null;
+  const issues: string[] = [];
+  const major = jdkMajor(fact.jdk);
+  if (major !== null && fact.jdk && rule.jdk.length > 0) {
+    const sameMajor = rule.jdk.filter((entry) => jdkParts(entry.version)[0] === major);
+    if (sameMajor.length === 0) {
+      const majors = [...new Set(rule.jdk.map((entry) => jdkParts(entry.version)[0]))].sort((x, y) => (x ?? 0) - (y ?? 0));
+      issues.push(`WebLogic ${rule.version} é certificado só com JDK ${majors.join(', ')}; este roda JDK ${major}.`);
+    } else {
+      const lowest = sameMajor.reduce((min, entry) => (compareParts(jdkParts(entry.version), jdkParts(min.version)) < 0 ? entry : min));
+      const parts = jdkParts(fact.jdk);
+      if (parts.length > 2 && compareParts(parts, jdkParts(lowest.version)) < 0) issues.push(`WebLogic ${rule.version} exige JDK ${major} a partir da ${lowest.version}; este roda ${fact.jdk}.`);
+    }
+  }
+  const db = catalog[shortHost(fact.dbHost) ?? ''];
+  const dbs = certifiedDbs(rule, normalizeDbVersion);
+  if (db && dbs.size > 0 && !dbs.has(db)) issues.push(`O My Oracle Support não lista o banco ${db} para o WebLogic ${rule.version} (lista ${DB_VERSIONS.filter((v) => dbs.has(v)).join(', ')}).`);
+  return issues.length > 0 ? issues.join(' ') : null;
+}
+
+/** Aviso quando o WebLogic 12.2.1.4 usa um driver diferente do que vem de fábrica (ojdbc8 19.3); null quando é o de fábrica ou não se aplica. */
+export function embeddedDriverNote(fact: Pick<Fact, 'server' | 'serverVersion' | 'dbType' | 'driverVersion' | 'jar'>): string | null {
+  if (!isWls12214(fact) || fact.dbType !== 'Oracle' || !fact.driverVersion) return null;
+  return fact.jar === 'ojdbc8' && /^19\.3(\.|$)/.test(fact.driverVersion) ? null : 'Não é o driver de fábrica do WebLogic 12.2.1.4 (ojdbc8 19.3): o jar foi trocado ou vem na aplicação.';
 }
 
 /** Normaliza o texto de versão do banco ("19c", "Oracle 12.2", "11.2.0.4") para a coluna da matriz. */
@@ -70,7 +122,7 @@ export function parseCatalog(text: string): CatalogParse {
 
 /** Situação de uma conexão: compatibilidade do driver com a versão do banco, ou unk sem driver/versão. */
 export function statusOf(fact: Fact, catalog: Catalog): Status {
-  const line = driverLine(fact.driverVersion);
+  const line = factLine(fact);
   if (!line) return 'unk';
   const key = shortHost(fact.dbHost);
   const db = key ? catalog[key] : undefined;
@@ -79,7 +131,7 @@ export function statusOf(fact: Fact, catalog: Catalog): Status {
 
 /** Linha da matriz (jar + release) onde a conexão está hoje. */
 export function matrixRowOf(fact: Fact): MatrixRow | null {
-  const line = driverLine(fact.driverVersion);
+  const line = factLine(fact);
   if (!line) return null;
   const exact = MATRIX_ROWS.find((row) => row.id === `${fact.jar ?? ''}|${line}`);
   return exact ?? MATRIX_ROWS.find((row) => row.line === line) ?? null;
@@ -87,14 +139,41 @@ export function matrixRowOf(fact: Fact): MatrixRow | null {
 
 /** Sugestão de migração textual para uma conexão, ou null quando não há o que sugerir. */
 export function suggest(fact: Fact, catalog: Catalog): string | null {
-  const line = driverLine(fact.driverVersion);
-  if (!line) return null;
+  const parts = [serverIssue(fact, catalog), driverAdvice(fact, catalog)].filter((part): part is string => part !== null);
+  return parts.length > 0 ? parts.join(' ') : null;
+}
+
+/** JDK 6 ou 7: o ojdbc8 (exige JDK 8+) não roda, então o teto do driver é o 12.1, certificado só até o 19c. */
+function oldJdkAdvice(jdk: number, db: DbVersion | undefined): string {
+  const best = jdk === 6 ? 'ojdbc6 12.1' : 'ojdbc7 12.1';
+  const head = `JDK ${jdk}: o ojdbc8 exige JDK 8 ou mais novo e não roda neste servidor. O driver mais novo possível é o ${best}, que a Oracle certifica só até o 19c (fora de suporte).`;
+  const high = db === '21c' || db === '23ai' || db === '26ai';
+  if (high) return `${head} Para o banco ${db} é preciso subir o JDK para 8 ou mais, o que costuma exigir atualizar o servidor de aplicação. Sem isso, não há driver certificado.`;
+  return `${head} Para ir ao ojdbc8 19.x, suba antes o JDK para 8 ou mais (o que costuma exigir atualizar o servidor de aplicação). Confirmar a versão do servidor com a Oracle.`;
+}
+
+/** Jars de driver antigos: o nome já diz que a migração é necessária, mesmo sem a versão resolvida. */
+const OLD_JARS: ReadonlySet<string> = new Set(['ojdbc14', 'ojdbc5', 'ojdbc6', 'ojdbc7']);
+
+/** Sugestão pelo nome do jar quando a versão do driver não foi resolvida; só para jars antigos. */
+function jarAdvice(fact: Fact): string | null {
+  if (fact.dbType !== 'Oracle' || !fact.jar || !OLD_JARS.has(fact.jar)) return null;
+  const jdk = jdkMajor(fact.jdk);
+  const head = `Versão do driver não resolvida, mas o jar ${fact.jar} é de um driver antigo.`;
+  if (jdk !== null && jdk < 8) return `${head} ${oldJdkAdvice(jdk, undefined)}`;
+  return `${head} Migrar para ojdbc8 19.x (roda em JDK 8, 11, 17, 19 e 21 e é certificado com 19c, 21c e 26ai). Informe a versão do banco para confirmar.`;
+}
+
+function driverAdvice(fact: Fact, catalog: Catalog): string | null {
+  const line = factLine(fact);
+  if (!line) return jarAdvice(fact);
   const db = catalog[shortHost(fact.dbHost) ?? ''];
   const jdk = jdkMajor(fact.jdk);
+  if (jdk !== null && jdk < 8) return oldJdkAdvice(jdk, db);
   const jar = jdk === null || jdk <= 8 ? 'ojdbc8' : jdk <= 11 ? 'ojdbc11' : 'ojdbc17';
   const old = line === '11.2' || line === '12.1' || line === '12.2' || line === '18';
   if (!db) {
-    return old ? 'Migrar para ojdbc8 19.x (roda de JDK 8 a 21 e é certificado com 19c, 21c e 26ai). Informe a versão do banco para confirmar.' : null;
+    return old ? 'Migrar para ojdbc8 19.x (roda em JDK 8, 11, 17, 19 e 21 e é certificado com 19c, 21c e 26ai). Informe a versão do banco para confirmar.' : null;
   }
   const status = statusOf(fact, catalog);
   if (status === 'ok') return null;
@@ -145,7 +224,7 @@ export function matches(fact: Fact, filters: Filters, catalog: Catalog): boolean
   if (!filters.includeUnresolved && !fact.driverVersion) return false;
   if (filters.jars.size > 0 && !filters.jars.has(fact.jar ?? 'sem-jar')) return false;
   if (filters.ranges.size > 0) {
-    const line = driverLine(fact.driverVersion);
+    const line = factLine(fact);
     if (!line) return false;
     const hit = RANGES.some((range) => filters.ranges.has(range.label) && range.lines.includes(line));
     if (!hit) return false;

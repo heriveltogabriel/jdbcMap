@@ -1,5 +1,5 @@
 import { DRIVER_LINES } from '../rules/compat';
-import { driverLine } from '../domain/analysis';
+import { factLine } from '../domain/analysis';
 import { COLUMN_TITLES, buildFlow, layoutFlow, worstStatus, type Column, type FlowModel, type FlowNode } from '../domain/flow';
 import type { Catalog, Fact } from '../domain/types';
 import type { State } from '../state';
@@ -14,8 +14,8 @@ function columns(state: State): Column[] {
 
 function nodeColor(node: FlowNode, catalog: Catalog): string {
   if (node.column === 'driver') {
-    const fact = node.facts.find((f) => driverLine(f.driverVersion));
-    const line = fact ? driverLine(fact.driverVersion) : null;
+    const fact = node.facts.find((f) => factLine(f));
+    const line = fact ? factLine(fact) : null;
     return line ? (LINE_COLORS[DRIVER_LINES.indexOf(line)] ?? 'var(--unk)') : 'var(--unk)';
   }
   if (node.column === 'db') {

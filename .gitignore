@@ -5,3 +5,6 @@ dist/
 # Exportações do cliente nunca entram no repositório (hostnames, IPs e nomes de serviço).
 inventario*.json
 private/
+
+# Dados brutos e pacotes que não fazem parte do projeto.
+matriz/*.zip

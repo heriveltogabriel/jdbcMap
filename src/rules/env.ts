@@ -8,7 +8,7 @@ export const DEFAULT_ENV_RULE: EnvRule = {
 
 /**
  * Hostname no padrão de 4 caracteres (letra + 3 dígitos), depois a letra do ambiente e o restante numérico:
- * n121d004775 → d. O domínio (v131d063.prevnet) é descartado antes.
+ * n121d004775 → d. O domínio (srv1d063.example.net) é descartado antes.
  */
 export function envFromHostname(hostname: string | null | undefined, rule: EnvRule = DEFAULT_ENV_RULE): string {
   const short = (hostname ?? '').split('.')[0] ?? '';

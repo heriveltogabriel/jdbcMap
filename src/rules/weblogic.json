@@ -1,0 +1,3159 @@
+{
+  "readAt": "2026-10-26",
+  "origin": "My Oracle Support, aba Certifications (exportação em CSV)",
+  "servers": [
+    {
+      "version": "10.3.6",
+      "source": "Oracle WebLogic Server (Version 10.3.6.0.0.csv",
+      "database": [
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "18.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.3.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.1.0.7.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "10.2.0.5.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "10.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "18.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "11.2.0.3.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "11.2.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "11.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "11.1.0.7.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "10.2.0.5.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "10.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "18.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.3.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.1.0.7.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "10.2.0.5.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "10.2.0.4.0",
+          "type": "primary"
+        }
+      ],
+      "jdk": [
+        {
+          "version": "1.7.0_471",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_451",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_431",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_401",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_351",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_341",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_331",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_321",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_301",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_291",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_281",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_271",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_261",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_251",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_241",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_231",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_221",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_211",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_201",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_191",
+          "type": "primary"
+        }
+      ],
+      "driver": []
+    },
+    {
+      "version": "12.1.1",
+      "source": "Oracle WebLogic Server (Version 12.1.1.0.0.csv",
+      "database": [
+        {
+          "usage": "geral",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "geral",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "geral",
+          "ai": false,
+          "version": "11.2.0.3.0",
+          "type": "primary"
+        },
+        {
+          "usage": "geral",
+          "ai": false,
+          "version": "11.1.0.7.0",
+          "type": "primary"
+        }
+      ],
+      "jdk": [
+        {
+          "version": "1.7.0_471",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_451",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_431",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_401",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_351",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_341",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_331",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_321",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_301",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_291",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_281",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_271",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_261",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_251",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_241",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_231",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_221",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_211",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_201",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_191",
+          "type": "primary"
+        }
+      ],
+      "driver": []
+    },
+    {
+      "version": "12.1.2",
+      "source": "Oracle WebLogic Server (Version 12.1.2.0.0).csv",
+      "database": [
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.3.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.1.0.7.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.3.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.1.0.7.0",
+          "type": "primary"
+        }
+      ],
+      "jdk": [
+        {
+          "version": "1.7.0_471",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_451",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_431",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_401",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_351",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_341",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_331",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_321",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_301",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_291",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_281",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_271",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_261",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_251",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_241",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_231",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_221",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_211",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_201",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_191",
+          "type": "primary"
+        }
+      ],
+      "driver": [
+        {
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "version": "11.2.0.3.0",
+          "type": "primary"
+        }
+      ]
+    },
+    {
+      "version": "12.1.3",
+      "source": "Oracle WebLogic Server (Version 12.1.3.0.0.csv",
+      "database": [
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.3.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.1.0.7.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "11.2.0.3.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "11.1.0.7.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.3.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.1.0.7.0",
+          "type": "primary"
+        }
+      ],
+      "jdk": [
+        {
+          "version": "1.8.0_511",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_501",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_491",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_481",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_471",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_461",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_451",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_441",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_431",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_421",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_411",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_401",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_391",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_381",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_371",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_361",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_351",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_341",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_331",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_321",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_311",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_301",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_291",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_281",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_271",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_261",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_251",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_241",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_231",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_221",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_212",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_211",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_202",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_201",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_192",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_191",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_181",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_471",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_451",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_431",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_401",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_351",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_341",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_331",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_321",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_301",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_291",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_281",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_271",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_261",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_251",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_241",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_231",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_221",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_211",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_201",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_191",
+          "type": "primary"
+        }
+      ],
+      "driver": [
+        {
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        }
+      ]
+    },
+    {
+      "version": "12.2.1.0",
+      "source": "Oracle WebLogic Server (Version 12.2.1.0.0).csv",
+      "database": [
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        }
+      ],
+      "jdk": [
+        {
+          "version": "1.8.0_92",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_91",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_77",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_74",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_73",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_72",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_71",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_66",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_65",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_60",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_511",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_51",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_501",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_491",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_481",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_471",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_461",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_451",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_441",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_431",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_421",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_411",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_401",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_391",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_381",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_371",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_361",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_351",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_341",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_331",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_321",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_311",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_301",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_291",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_281",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_271",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_261",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_251",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_241",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_231",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_221",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_212",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_211",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_202",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_201",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_192",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_191",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_181",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_172",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_171",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_162",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_161",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_152",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_151",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_141",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_131",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_121",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_112",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_111",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_102",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_101",
+          "type": "primary"
+        }
+      ],
+      "driver": [
+        {
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        }
+      ]
+    },
+    {
+      "version": "12.2.1.1",
+      "source": "Oracle WebLogic Server (Version 12.2.1.1.0).csv",
+      "database": [
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        }
+      ],
+      "jdk": [
+        {
+          "version": "1.8.0_92",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_91",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_77",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_511",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_501",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_491",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_481",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_471",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_461",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_451",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_441",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_431",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_421",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_411",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_401",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_391",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_381",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_371",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_361",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_351",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_341",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_331",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_321",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_311",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_301",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_291",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_281",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_271",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_261",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_251",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_241",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_231",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_221",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_212",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_211",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_202",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_201",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_192",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_191",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_181",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_172",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_171",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_162",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_161",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_152",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_151",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_141",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_131",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_121",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_112",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_111",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_102",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_101",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_471",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_451",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_431",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_401",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_351",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_341",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_331",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_321",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_301",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_291",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_281",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_271",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_261",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_251",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_241",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_231",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_221",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_211",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_201",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_191",
+          "type": "primary"
+        }
+      ],
+      "driver": [
+        {
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        }
+      ]
+    },
+    {
+      "version": "12.2.1.2",
+      "source": "Oracle WebLogic Server (Version 12.2.1.2.0).csv",
+      "database": [
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "18.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "18.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        }
+      ],
+      "jdk": [
+        {
+          "version": "1.8.0_511",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_501",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_491",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_481",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_471",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_461",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_451",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_441",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_431",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_421",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_411",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_401",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_391",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_381",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_371",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_361",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_351",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_341",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_331",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_321",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_311",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_301",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_291",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_281",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_271",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_261",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_251",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_241",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_231",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_221",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_212",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_211",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_202",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_201",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_192",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_191",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_181",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_172",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_171",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_162",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_161",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_152",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_151",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_141",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_131",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_121",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_112",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_111",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_102",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_101",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_471",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_451",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_431",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_401",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_351",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_341",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_331",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_321",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_301",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_291",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_281",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_271",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_261",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_251",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_241",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_231",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_221",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_211",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_201",
+          "type": "primary"
+        },
+        {
+          "version": "1.7.0_191",
+          "type": "primary"
+        }
+      ],
+      "driver": [
+        {
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        }
+      ]
+    },
+    {
+      "version": "12.2.1.3",
+      "source": "Oracle WebLogic Server (Version 12.2.1.3.0).csv",
+      "database": [
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "18.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "18.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "18.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        }
+      ],
+      "jdk": [
+        {
+          "version": "1.8.0_511",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_501",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_491",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_481",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_471",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_461",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_451",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_441",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_431",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_421",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_411",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_401",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_391",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_381",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_371",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_361",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_351",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_341",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_331",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_321",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_311",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_301",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_291",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_281",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_271",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_261",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_251",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_241",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_231",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_221",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_212",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_211",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_202",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_201",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_192",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_191",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_181",
+          "type": "primary"
+        }
+      ],
+      "driver": []
+    },
+    {
+      "version": "12.2.1.4",
+      "source": "Oracle WebLogic Server (Version 12.2.1.4.0).csv",
+      "database": [
+        {
+          "usage": "servidor",
+          "ai": true,
+          "version": "23.26.2.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": true,
+          "version": "23.26.1.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": true,
+          "version": "23.26.2.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": true,
+          "version": "23.26.1.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "23.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "21.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "18.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "23.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "21.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "18.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        }
+      ],
+      "jdk": [
+        {
+          "version": "1.8.0_511",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_501",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_491",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_481",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_471",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_461",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_451",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_441",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_431",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_421",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_411",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_401",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_391",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_381",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_371",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_361",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_351",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_341",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_331",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_321",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_311",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_301",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_291",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_281",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_271",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_261",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_251",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_241",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_231",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_221",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_212",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_211",
+          "type": "primary"
+        }
+      ],
+      "driver": []
+    },
+    {
+      "version": "14.1.1",
+      "source": "Oracle WebLogic Server (Version 14.1.1.0.0).csv",
+      "database": [
+        {
+          "usage": "servidor",
+          "ai": true,
+          "version": "23.26.2.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": true,
+          "version": "23.26.1.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": true,
+          "version": "23.26.2.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": true,
+          "version": "23.26.1.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "23.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "18.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "18.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "rcu",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "23.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "18.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.2.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.2.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "12.1.0.1.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "11.2.0.4.0",
+          "type": "primary"
+        }
+      ],
+      "jdk": [
+        {
+          "version": "11.0.9",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.8",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.7",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.6",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.33",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.32",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.31",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.30",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.29",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.28",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.27",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.26",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.25",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.24",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.23",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.22",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.21",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.20",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.19",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.18",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.17",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.16",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.15",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.14",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.13.0.0",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.11",
+          "type": "primary"
+        },
+        {
+          "version": "11.0.10",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_511",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_501",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_491",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_481",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_471",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_461",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_451",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_441",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_431",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_421",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_411",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_401",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_391",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_381",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_371",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_361",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_351",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_341",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_331",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_321",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_311",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_301",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_291",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_281",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_271",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_261",
+          "type": "primary"
+        },
+        {
+          "version": "1.8.0_251",
+          "type": "primary"
+        }
+      ],
+      "driver": []
+    },
+    {
+      "version": "14.1.2",
+      "source": "Oracle WebLogic Server (Version 14.1.2.0.0).csv",
+      "database": [
+        {
+          "usage": "servidor",
+          "ai": true,
+          "version": "23.26.2.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": true,
+          "version": "23.26.1.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": true,
+          "version": "23.26.2.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": true,
+          "version": "23.26.1.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "23.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "21.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "23.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "21.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        }
+      ],
+      "jdk": [
+        {
+          "version": "21.0.13",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.12",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.11",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.10",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.9",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.8",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.7",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.6",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.5",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.4",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.21",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.20",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.19",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.18",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.17",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.16",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.15",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.14",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.13",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.12",
+          "type": "primary"
+        }
+      ],
+      "driver": []
+    },
+    {
+      "version": "15.1.1",
+      "source": "Oracle WebLogic Server (Version 15.1.1.0.0).csv",
+      "database": [
+        {
+          "usage": "servidor",
+          "ai": true,
+          "version": "23.26.2.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": true,
+          "version": "23.26.1.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": true,
+          "version": "23.26.2.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": true,
+          "version": "23.26.1.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "23.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "servidor",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "23.0.0.0.0",
+          "type": "primary"
+        },
+        {
+          "usage": "aplicacao",
+          "ai": false,
+          "version": "19.0.0.0.0",
+          "type": "primary"
+        }
+      ],
+      "jdk": [
+        {
+          "version": "21.0.13",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.12",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.11",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.10",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.9",
+          "type": "primary"
+        },
+        {
+          "version": "21.0.8",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.21",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.20",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.19",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.18",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.17",
+          "type": "primary"
+        },
+        {
+          "version": "17.0.16",
+          "type": "primary"
+        }
+      ],
+      "driver": []
+    }
+  ]
+}

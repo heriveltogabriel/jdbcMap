@@ -1,4 +1,4 @@
-import { driverLine, jdkMajor, statusOf, suggest } from '../domain/analysis';
+import { jdkMajor, statusOf, suggest } from '../domain/analysis';
 import type { Catalog, Fact } from '../domain/types';
 import { esc } from './html';
 
@@ -14,7 +14,6 @@ interface Group {
 export function renderPlan(facts: Fact[], catalog: Catalog): string {
   const groups = new Map<string, Group>();
   for (const fact of facts) {
-    if (!driverLine(fact.driverVersion)) continue;
     const advice = suggest(fact, catalog);
     if (!advice) continue;
     const key = [fact.server, fact.serverVersion, fact.jar, fact.driverVersion, jdkMajor(fact.jdk), advice].join('|');

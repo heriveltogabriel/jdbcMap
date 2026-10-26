@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { driverLine, jdkMajor, matches, emptyFilters, matrixCounts, matrixRowOf, migrationTargets, normalizeDbVersion, parseCatalog, shortHost, statusOf, suggest } from '../src/domain/analysis';
+import { driverLine, factLine, serverIssue, embeddedDriverNote, jdkMajor, matches, emptyFilters, matrixCounts, matrixRowOf, migrationTargets, normalizeDbVersion, parseCatalog, shortHost, statusOf, suggest } from '../src/domain/analysis';
 import { buildSnapshot } from '../src/domain/inventory';
 import type { Catalog, Fact } from '../src/domain/types';
 import { MATRIX, MATRIX_ROWS, compatOf } from '../src/rules/compat';
@@ -131,5 +131,79 @@ describe('filtros e agregações', () => {
     }
     expect(targets.some((t) => t.rowId === 'ojdbc8|19')).toBe(true);
     expect(targets.some((t) => t.rowId === 'ojdbc8|12.2')).toBe(false);
+  });
+});
+
+describe('PostgreSQL e outros bancos', () => {
+  it('driver que não é Oracle não ganha linha nem status', () => {
+    const pg = fact({ dbType: 'PostgreSQL', driverVersion: '42.7.3', jar: 'postgresql' });
+    expect(factLine(pg)).toBeNull();
+    expect(statusOf(pg, { dbscan1: '19c' })).toBe('unk');
+    expect(matrixRowOf(pg)).toBeNull();
+    expect(suggest(pg, {})).toBeNull();
+  });
+  it('driverLine não aceita versões muito acima da 26ai', () => expect(driverLine('42.7.3')).toBeNull());
+});
+
+describe('serverIssue (certificação do MOS: JDK e banco)', () => {
+  it.each(['1.8.0_211', '1.8.0_251', '1.8.0_471', '1.8.0'])('WebLogic 12.2.1.4 aceita o JDK %s', (jdk) => expect(serverIssue(fact({ jdk }))).toBeNull());
+  it('JDK 8 abaixo da 211 é apontado', () => expect(serverIssue(fact({ jdk: '1.8.0_202' }))).toMatch(/1\.8\.0_211/));
+  it('JDK 11 no 12.2.1.4 é apontado', () => expect(serverIssue(fact({ jdk: '11.0.2' }))).toMatch(/só com JDK 8.*JDK 11/));
+  it('JDK 11 no 14.1.1 é aceito; 17 não', () => {
+    expect(serverIssue(fact({ serverVersion: '14.1.1.0.0', jdk: '11.0.20' }))).toBeNull();
+    expect(serverIssue(fact({ serverVersion: '14.1.1.0.0', jdk: '17.0.7' }))).toMatch(/JDK 8, 11/);
+  });
+  it('JDK 6 no 10.3.6 não consta (o MOS lista só o 1.7)', () => expect(serverIssue(fact({ serverVersion: '10.3.6.0', jdk: '1.6.0_45' }))).toMatch(/só com JDK 7.*JDK 6/));
+  it('JDK não coletado, versão fora do MOS ou outro servidor não geram aviso', () => {
+    expect(serverIssue(fact({ jdk: null }))).toBeNull();
+    expect(serverIssue(fact({ serverVersion: '9.9.9.0', jdk: '17.0.7' }))).toBeNull();
+    expect(serverIssue(fact({ server: 'Tomcat', jdk: '17.0.7' }))).toBeNull();
+  });
+  it('entra na sugestão da conexão', () => expect(suggest(fact({ jdk: '1.8.0_202' }), { dbscan1: '19c' })).toMatch(/exige JDK 8/));
+});
+
+describe('WebLogic 12.2.1.4: banco e driver de fábrica', () => {
+  it('banco fora da lista do MOS é apontado; dentro dela não', () => {
+    expect(serverIssue(fact({}), { dbscan1: '21c' })).toBeNull();
+    expect(serverIssue(fact({}), { dbscan1: '26ai' })).toBeNull();
+    expect(serverIssue(fact({ serverVersion: '14.1.2.0.0', jdk: '17.0.7' }), { dbscan1: '12c' })).toMatch(/não lista o banco 12c/);
+    expect(serverIssue(fact({ serverVersion: '15.1.1.0.0', jdk: '21.0.8' }), { dbscan1: '21c' })).toMatch(/não lista o banco 21c/);
+  });
+  it('driver de fábrica não gera nota; outro jar ou versão gera', () => {
+    expect(embeddedDriverNote(fact({}))).toBeNull();
+    expect(embeddedDriverNote(fact({ jar: 'ojdbc11', driverVersion: '23.4.0.0.0' }))).toMatch(/de fábrica/);
+    expect(embeddedDriverNote(fact({ driverVersion: '19.8.0.0.0' }))).toMatch(/de fábrica/);
+    expect(embeddedDriverNote(fact({ serverVersion: '12.2.1.3.0', jar: 'ojdbc6' }))).toBeNull();
+  });
+});
+
+describe('JDK 6 e 7: o ojdbc8 não roda', () => {
+  const wls = { serverVersion: '10.3.6.0', driverVersion: '11.2.0.4.0', jar: 'ojdbc6' };
+  it('JDK 6 não sugere ojdbc8, com ou sem catálogo', () => {
+    const catalogs: Catalog[] = [{}, { dbscan1: '19c' }, { dbscan1: '21c' }];
+    for (const catalog of catalogs) {
+      const advice = suggest(fact({ ...wls, jdk: '1.6.0_45' }), catalog);
+      expect(advice).toMatch(/exige JDK 8/);
+      expect(advice).toMatch(/ojdbc6 12\.1/);
+      expect(advice).not.toMatch(/^Migrar para ojdbc8/);
+    }
+  });
+  it('JDK 6 com banco 21c diz que não há driver certificado', () => expect(suggest(fact({ ...wls, jdk: '1.6.0_45' }), { dbscan1: '21c' })).toMatch(/não há driver certificado/));
+  it('JDK 7 aponta o ojdbc7', () => expect(suggest(fact({ ...wls, jdk: '1.7.0_80' }), {})).toMatch(/ojdbc7 12\.1/));
+  it('JDK 8 continua sugerindo ojdbc8', () => expect(suggest(fact({ ...wls, jdk: '1.8.0_251' }), {})).toMatch(/ojdbc8 19/));
+});
+
+describe('sugestão pelo jar quando a versão do driver não foi resolvida', () => {
+  const unresolved = { driverVersion: null, server: 'Tomcat', serverVersion: '6.0.37' };
+  it('ojdbc14 em JDK 6 aponta o limite do JDK, sem sugerir ojdbc8', () => {
+    const advice = suggest(fact({ ...unresolved, jar: 'ojdbc14', jdk: '1.6.0_45' }), {});
+    expect(advice).toMatch(/ojdbc14 é de um driver antigo/);
+    expect(advice).toMatch(/exige JDK 8/);
+  });
+  it('ojdbc6 em JDK 8 sugere ojdbc8 19.x', () => expect(suggest(fact({ ...unresolved, jar: 'ojdbc6', jdk: '1.8.0_251' }), {})).toMatch(/Migrar para ojdbc8 19\.x/));
+  it('jar moderno, sem jar, ou banco que não é Oracle não geram sugestão', () => {
+    expect(suggest(fact({ ...unresolved, jar: 'ojdbc11', jdk: '17.0.7' }), {})).toBeNull();
+    expect(suggest(fact({ ...unresolved, jar: null }), {})).toBeNull();
+    expect(suggest(fact({ ...unresolved, jar: 'ojdbc6', dbType: 'H2' }), {})).toBeNull();
   });
 });

@@ -1,4 +1,4 @@
-import { RANGES, driverLine, shortHost } from '../domain/analysis';
+import { RANGES, factLine, shortHost } from '../domain/analysis';
 import type { Fact } from '../domain/types';
 import type { State } from '../state';
 import { STATUS_LABEL, STATUS_ORDER, chip, esc } from './html';
@@ -18,7 +18,7 @@ export function renderSidebar(state: State, all: Fact[]): string {
   const byType = all.filter((fact) => f.dbTypes.size === 0 || f.dbTypes.has(fact.dbType));
   const withDriver = byType.filter((fact) => fact.driverVersion);
   const jars = counts(withDriver, (fact) => fact.jar ?? 'sem-jar').sort((a, b) => jarOrder(a[0]) - jarOrder(b[0]));
-  const ranges = RANGES.map((range): [string, number] => [range.label, withDriver.filter((fact) => { const line = driverLine(fact.driverVersion); return line !== null && range.lines.includes(line); }).length]);
+  const ranges = RANGES.map((range): [string, number] => [range.label, withDriver.filter((fact) => { const line = factLine(fact); return line !== null && range.lines.includes(line); }).length]);
   const known = Object.keys(state.catalog).length;
   const hostsInData = new Set(all.map((fact) => shortHost(fact.dbHost)).filter(Boolean)).size;
   return `

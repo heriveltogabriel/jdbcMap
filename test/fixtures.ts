@@ -9,7 +9,7 @@ export function syntheticExport(): Row {
   ];
   const hosts = [
     { id: 'h1', environmentId: 'env-1', hostname: 'n121d004775', distribution: 'Red Hat Enterprise Linux Server release 7.2 (Maipo)' },
-    { id: 'h2', environmentId: 'env-1', hostname: 'v321h137.prevnet', distribution: 'Red Hat Enterprise Linux release 8.9 (Ootpa)' },
+    { id: 'h2', environmentId: 'env-1', hostname: 'srv1h137.example.net', distribution: 'Red Hat Enterprise Linux release 8.9 (Ootpa)' },
     { id: 'h3', environmentId: 'env-2', hostname: 'n121p000001', distribution: 'Red Hat Enterprise Linux release 9.4 (Plow)' },
     { id: 'h4', environmentId: 'env-1', hostname: 'hprouing-master-0', distribution: 'Red Hat Enterprise Linux release 9.4 (Plow)' },
   ];

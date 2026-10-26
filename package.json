@@ -1,16 +1,17 @@
 {
   "name": "jdbcmap",
-  "version": "0.1.0",
+  "version": "0.4.1",
   "private": true,
   "type": "module",
-  "description": "Mapa de drivers JDBC, servidores de aplica\u00e7\u00e3o e bancos Oracle a partir da exporta\u00e7\u00e3o do Java Assessment",
+  "description": "Mapa de drivers JDBC, servidores de aplicação e bancos Oracle a partir da exportação do Java Assessment",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "preview": "vite preview",
-    "e2e": "node e2e/ui.mjs"
+    "e2e": "node e2e/ui.mjs",
+    "matriz": "node scripts/build-weblogic-matrix.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",

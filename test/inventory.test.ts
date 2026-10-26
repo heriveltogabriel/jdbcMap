@@ -31,7 +31,7 @@ describe('envFromHostname', () => {
     expect(envFromHostname('n121p004775')).toBe('Produção');
   });
   it('descarta o domínio e ignora caixa', () => {
-    expect(envFromHostname('V131D063.prevnet')).toBe('Desenvolvimento');
+    expect(envFromHostname('SRV1D063.example.net')).toBe('Desenvolvimento');
   });
   it('não infere em hostnames fora do padrão', () => {
     expect(envFromHostname('hprouing-master-0')).toBe('Não inferido');
