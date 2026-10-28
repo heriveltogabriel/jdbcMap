@@ -67,6 +67,7 @@ function renderQuality(state: State): string {
   return `<div class="card"><h3>Qualidade da coleta em uso</h3><div class="grid2">
     <div class="fact"><b>${percent(stats.oracleWithDriver, stats.oracleDatasources)}</b><span>datasources Oracle com versão de driver (${stats.oracleWithDriver} de ${stats.oracleDatasources})</span></div>
     <div class="fact"><b>${stats.envMismatch}</b><span>máquinas com ambiente cadastrado diferente do hostname</span></div>
-    <div class="fact"><b>${stats.hosts}</b><span>máquinas · ${env}</span></div></div>
+    <div class="fact"><b>${stats.hosts}</b><span>máquinas · ${env}</span></div>
+    ${stats.dbVersions ? `<div class="fact"><b>${percent(stats.dbVersions.single + stats.dbVersions.multiple, stats.oracleDatasources)}</b><span>datasources Oracle com versão de banco no CMDB (${stats.dbVersions.single} única, ${stats.dbVersions.multiple} com várias versões, ${stats.dbVersions.unidentified} não identificada, ${stats.dbVersions.noHost} sem host)</span></div>` : ''}</div>
     ${reasons ? `<table style="margin-top:10px"><tr><th>Sem versão de driver: motivo do coletor</th><th>Datasources</th></tr>${reasons}</table>` : ''}</div>`;
 }

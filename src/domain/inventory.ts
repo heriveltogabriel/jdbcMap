@@ -1,5 +1,6 @@
+import { normalizeDbVersion } from './analysis';
 import { DEFAULT_ENV_RULE, envFromHostname } from '../rules/env';
-import type { EnvRule, Fact, Snapshot, SnapshotStats } from './types';
+import type { DbVersion, EnvRule, Fact, Snapshot, SnapshotStats } from './types';
 
 /** Formato exportado pelo dashboard do Java Assessment (Administração → exportar inventário). */
 export const SUPPORTED_FORMAT = 'java-assessment-inventory';
@@ -56,6 +57,14 @@ function osName(host: Row | undefined): string {
   if (/red hat/i.test(text) && release) return `RHEL ${release[1]}`;
   if (release && text) return `${(text.split(' release')[0] ?? '').replace('Enterprise Linux', '').trim().slice(0, 20)} ${release[1]}`;
   return text.slice(0, 30) || 'Sistema não informado';
+}
+
+/** Versões do banco vindas do CMDB (campos databaseVersion* da exportação 2.1.28+); nada quando o arquivo não os traz. */
+function dbVersionsOf(ds: Row): Pick<Fact, 'dbVersions' | 'dbVersionStatus'> {
+  if (ds.databaseVersionStatus === undefined && ds.databaseVersions === undefined) return {};
+  const list: unknown[] = Array.isArray(ds.databaseVersions) ? ds.databaseVersions : ds.databaseVersion ? [ds.databaseVersion] : [];
+  const versions = [...new Set(list.map((v) => normalizeDbVersion(String(v))).filter((v): v is DbVersion => v !== null))];
+  return { dbVersions: versions, dbVersionStatus: ds.databaseVersionStatus === undefined ? undefined : String(ds.databaseVersionStatus) };
 }
 
 function jarOf(artifact: string | undefined, family: string | undefined): string | null {
@@ -133,6 +142,7 @@ export function buildSnapshot(json: unknown, options: BuildOptions = {}): Snapsh
         jar: jarOf(result.driverArtifact ?? ds.driverArtifact, result.driverFamily),
         resolution,
         resolutionReason: result.driverResolutionReason ?? ds.driverResolutionReason ?? null,
+        ...dbVersionsOf(ds),
       });
     }
   }
@@ -175,6 +185,16 @@ function statsOf(facts: Fact[], hosts: Map<string, Row>, environments: Map<strin
     const reason = sample ? (sample.resolution === 'SEM_RESOLUCAO' ? 'SEM_RESOLUCAO' : sample.resolution) : 'SEM_RESOLUCAO';
     unresolved[reason] = (unresolved[reason] ?? 0) + 1;
   }
+  const dbStatus = new Map<string, string | undefined>();
+  for (const f of oracle) if (!dbStatus.has(f.ds)) dbStatus.set(f.ds, f.dbVersionStatus);
+  const hasCmdb = [...dbStatus.values()].some((s) => s !== undefined);
+  const dbVersions = { single: 0, multiple: 0, unidentified: 0, noHost: 0 };
+  for (const s of dbStatus.values()) {
+    if (s === 'unica') dbVersions.single++;
+    else if (s === 'multiplas') dbVersions.multiple++;
+    else if (s === 'host_nao_informado') dbVersions.noHost++;
+    else dbVersions.unidentified++;
+  }
   return {
     facts: facts.length,
     hosts: hosts.size,
@@ -183,6 +203,7 @@ function statsOf(facts: Fact[], hosts: Map<string, Row>, environments: Map<strin
     envInferred,
     envMismatch,
     unresolved,
+    ...(hasCmdb ? { dbVersions } : {}),
   };
 }
 

@@ -4,6 +4,7 @@ import { buildSnapshot } from '../src/domain/inventory';
 import type { Catalog, Fact } from '../src/domain/types';
 import { MATRIX, MATRIX_ROWS, compatOf } from '../src/rules/compat';
 import { syntheticExport } from './fixtures';
+import { datasourcesCsv, emptyDetailFilter, filterDetail, hostsCsv } from '../src/ui/detailView';
 
 function fact(patch: Partial<Fact>): Fact {
   return {
@@ -123,7 +124,7 @@ describe('filtros e agregações', () => {
   });
   it('destinos de migração cobrem os bancos em uso', () => {
     const { cell } = matrixCounts(facts, { dbscan1: '19c' });
-    const targets = migrationTargets('ojdbc6|11.2', cell, true);
+    const targets = migrationTargets('ojdbc6|11.2', cell, true).filter((t) => t.usable);
     expect(targets.length).toBeGreaterThan(0);
     for (const target of targets) {
       expect(target.covers).toEqual(['19c']);
@@ -205,5 +206,73 @@ describe('sugestão pelo jar quando a versão do driver não foi resolvida', () 
     expect(suggest(fact({ ...unresolved, jar: 'ojdbc11', jdk: '17.0.7' }), {})).toBeNull();
     expect(suggest(fact({ ...unresolved, jar: null }), {})).toBeNull();
     expect(suggest(fact({ ...unresolved, jar: 'ojdbc6', dbType: 'H2' }), {})).toBeNull();
+  });
+});
+
+describe('versão do banco vinda do CMDB', () => {
+  it('usa as versões do fato quando não há catálogo', () => {
+    expect(statusOf(fact({ dbVersions: ['19c'] }), {})).toBe('ok');
+    expect(statusOf(fact({ dbVersions: [] }), {})).toBe('unk');
+  });
+  it('o catálogo manual vale sozinho, acima do CMDB', () => {
+    const f = fact({ driverVersion: '12.1.0.2.0', jar: 'ojdbc7', dbVersions: ['19c', '21c'] });
+    expect(statusOf(f, { dbscan1: '19c' })).toBe('legacy');
+  });
+  it('com várias versões vale o pior caso e a sugestão avisa da ambiguidade', () => {
+    const f = fact({ driverVersion: '12.1.0.2.0', jar: 'ojdbc7', jdk: '1.8.0_251', dbVersions: ['19c', '23ai'] });
+    expect(statusOf(f, {})).toBe('bad');
+    expect(suggest(f, {})).toContain('mais de uma versão');
+  });
+  it('conta a conexão em cada versão na matriz', () => {
+    const { cell } = matrixCounts([fact({ dbVersions: ['18c', '19c'] })], {});
+    expect(cell.get('ojdbc8|19|18c')).toBe(1);
+    expect(cell.get('ojdbc8|19|19c')).toBe(1);
+  });
+  it('lê databaseVersions da exportação e ignora rótulos sem versão', () => {
+    const json = syntheticExport();
+    const ds = (json.data.datasources as Record<string, unknown>[])[0]!;
+    Object.assign(ds, { databaseVersionStatus: 'multiplas', databaseVersions: ['11.2.0.4.200714', '11gR202', '19.16.0.0.0'] });
+    const snap = buildSnapshot(json);
+    expect(snap.facts.find((f) => f.ds === 'd1')?.dbVersions).toEqual(['11g', '19c']);
+    expect(snap.stats.dbVersions?.multiple).toBe(1);
+  });
+});
+
+describe('filtros e CSV das tabelas do mapa', () => {
+  const facts = [
+    fact({ ds: 'a', host: 'srv-a', env: 'Produção', dbVersions: ['19c'] }),
+    fact({ ds: 'b', host: 'srv-b', env: 'Homologação', dbVersions: [], name: '=cmd' }),
+  ];
+  it('filtra por coluna: situação, ambiente, banco e máquina', () => {
+    expect(filterDetail(facts, { ...emptyDetailFilter(), env: 'Produção' }, {}).map((f) => f.ds)).toEqual(['a']);
+    expect(filterDetail(facts, { ...emptyDetailFilter(), db: '19c' }, {}).map((f) => f.ds)).toEqual(['a']);
+    expect(filterDetail(facts, { ...emptyDetailFilter(), db: '11g' }, {}).map((f) => f.ds)).toEqual([]);
+    expect(filterDetail(facts, { ...emptyDetailFilter(), status: 'ok' }, {}).map((f) => f.ds)).toEqual(['a']);
+    expect(filterDetail(facts, { ...emptyDetailFilter(), host: 'SRV-B' }, {}).map((f) => f.ds)).toEqual(['b']);
+  });
+  it('gera CSV com BOM, ponto e vírgula e sem fórmula injetada', () => {
+    const csv = datasourcesCsv(facts, {});
+    expect(csv.startsWith('﻿Datasource;')).toBe(true);
+    expect(csv).toContain("'=cmd;");
+    expect(hostsCsv(facts, {}).split('\r\n')).toHaveLength(4);
+  });
+});
+
+describe('destinos de migração levam em conta JDK e servidor', () => {
+  const wls = (patch: Partial<Fact>) => fact({ server: 'WebLogic', serverVersion: '12.1.1.0', jdk: '1.6.0_45', driverVersion: '11.2.0.3.0', jar: 'ojdbc6', ...patch });
+  it('JDK 6 não migra para ojdbc8; o servidor sem 19c no MOS também bloqueia', () => {
+    const facts = [wls({})];
+    const { cell } = matrixCounts(facts, { dbscan1: '19c' });
+    const targets = migrationTargets('ojdbc6|11.2', cell, true, facts, { dbscan1: '19c' });
+    const ojdbc8 = targets.find((t) => t.rowId === 'ojdbc8|19');
+    expect(ojdbc8?.usable).toBe(false);
+    expect(ojdbc8?.blockers.join(' ')).toMatch(/JDK 6/);
+  });
+  it('JDK 8 em servidor sem restrição migra para ojdbc8 19.x', () => {
+    const facts = [fact({ server: 'Spring Boot', serverVersion: '2.7.18', jdk: '1.8.0_252', driverVersion: '11.2.0.4.0', jar: 'ojdbc6' })];
+    const { cell } = matrixCounts(facts, { dbscan1: '19c' });
+    const target = migrationTargets('ojdbc6|11.2', cell, true, facts, { dbscan1: '19c' }).find((t) => t.rowId === 'ojdbc8|19');
+    expect(target?.usable).toBe(true);
+    expect(target?.ok).toBe(1);
   });
 });

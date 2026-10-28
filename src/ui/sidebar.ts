@@ -1,6 +1,7 @@
-import { RANGES, factLine, shortHost } from '../domain/analysis';
+import { RANGES, factLine, hostsWithVersion, shortHost } from '../domain/analysis';
 import type { Fact } from '../domain/types';
 import type { State } from '../state';
+import { groupDatasources } from './detailView';
 import { STATUS_LABEL, STATUS_ORDER, chip, esc } from './html';
 
 function counts(facts: Fact[], pick: (fact: Fact) => string | null): [string, number][] {
@@ -19,7 +20,8 @@ export function renderSidebar(state: State, all: Fact[]): string {
   const withDriver = byType.filter((fact) => fact.driverVersion);
   const jars = counts(withDriver, (fact) => fact.jar ?? 'sem-jar').sort((a, b) => jarOrder(a[0]) - jarOrder(b[0]));
   const ranges = RANGES.map((range): [string, number] => [range.label, withDriver.filter((fact) => { const line = factLine(fact); return line !== null && range.lines.includes(line); }).length]);
-  const known = Object.keys(state.catalog).length;
+  const unresolved = groupDatasources(all.filter((fact) => fact.dbType === 'Oracle'), state.catalog).filter((g) => !g.fact.driverVersion).length;
+  const known = hostsWithVersion(all, state.catalog).size;
   const hostsInData = new Set(all.map((fact) => shortHost(fact.dbHost)).filter(Boolean)).size;
   return `
   <div class="card"><h3>Tipo de banco</h3><div class="chips">${counts(all, (x) => x.dbType).map(([k, n]) => chip('dbTypes', k, k, n, f.dbTypes.has(k))).join('')}</div></div>
@@ -34,10 +36,10 @@ export function renderSidebar(state: State, all: Fact[]): string {
     <input type="text" id="q" value="${esc(f.query)}" placeholder="host, serviço, datasource, driver">
     <div class="row"><label><input type="checkbox" data-action="opt" data-opt="showOs" ${state.showOs ? 'checked' : ''}> mostrar coluna Sistema operacional</label></div>
     <div class="row"><label><input type="checkbox" data-action="opt" data-opt="showJdk" ${state.showJdk ? 'checked' : ''}> mostrar coluna JDK</label></div>
-    <div class="row"><label><input type="checkbox" data-action="opt" data-opt="includeUnresolved" ${f.includeUnresolved ? 'checked' : ''}> incluir drivers não resolvidos</label></div>
+    <div class="row"><label><input type="checkbox" data-action="opt" data-opt="includeUnresolved" ${f.includeUnresolved ? 'checked' : ''}> incluir drivers não resolvidos${unresolved > 0 ? ` (${unresolved} datasources)` : ''}</label></div>
     <div class="row"><button class="btn" data-action="reset-filters">Limpar filtros e seleção</button></div></div>
   <div class="card"><h3>Catálogo de bancos (versão)</h3>
-    <div class="sub" style="margin-bottom:6px">${known} de ${hostsInData} bancos com versão. O inventário não traz a versão do banco: cole <code>host;versão</code>, uma por linha.</div>
+    <div class="sub" style="margin-bottom:6px">${known} de ${hostsInData} bancos com versão. Sem a versão do CMDB no inventário, cole <code>host;versão</code>, uma por linha; o catálogo vale mais que o CMDB.</div>
     <textarea id="catalog" placeholder="dbscan1.example.net;19c&#10;10.1.2.3;12.2">${esc(state.catalogText)}</textarea>
     <div class="row"><button class="btn pri" data-action="catalog-apply">Aplicar</button><button class="btn" data-action="catalog-sim">Simular</button><button class="btn" data-action="catalog-list">Listar bancos</button></div>
   </div>`;

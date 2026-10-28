@@ -1,4 +1,4 @@
-import { matches, parseCatalog, statusOf } from '../domain/analysis';
+import { hasDbVersions, matches, parseCatalog, statusOf } from '../domain/analysis';
 import { InventoryFormatError, buildSnapshot, previewInventory, withEnvRule } from '../domain/inventory';
 import { catalogTemplate, simulateCatalog } from '../domain/simulate';
 import type { Fact, Snapshot, Status } from '../domain/types';
@@ -10,8 +10,8 @@ import pkg from '../../package.json';
 import { RULES_INFO } from '../rules/compat';
 import { initialState, type State, type Tab } from '../state';
 import { renderData } from './dataView';
-import { renderDetail } from './detailView';
-import { esc, percent, STATUS_ORDER, when } from './html';
+import { datasourcesCsv, emptyDetailFilter, filterDetail, hostsCsv, groupDatasources, renderDetail, renderDetailToolbar, renderHosts, type DetailFilter } from './detailView';
+import { esc, STATUS_ORDER, when } from './html';
 import { renderMap } from './mapView';
 import { renderMatrix } from './matrixView';
 import { renderPlan } from './planView';
@@ -27,6 +27,10 @@ export class App {
   private store!: Store;
   private facts: Fact[] = [];
   private tipHtml = new Map<string, string>();
+  private detailFilter: DetailFilter = emptyDetailFilter();
+  /** Conexões do mapa antes dos filtros da tabela (seleção ou tudo que está visível). */
+  private detailBase: Fact[] = [];
+  private detailFocused = false;
   private armTimer: number | undefined;
 
   constructor(private root: HTMLElement) {}
@@ -181,7 +185,10 @@ export class App {
     });
     this.root.addEventListener('input', (event) => {
       const el = event.target as HTMLInputElement;
-      if (el.id === 'q') {
+      if (el.dataset.df) {
+        (this.detailFilter as unknown as Record<string, string>)[el.dataset.df] = el.value;
+        this.paintDetail();
+      } else if (el.id === 'q') {
         this.state.filters.query = el.value.trim().toLowerCase();
         this.state.selection = null;
         this.renderMain();
@@ -276,6 +283,8 @@ export class App {
       case 'import-confirm': await this.confirmImport(); break;
       case 'import-cancel': state.pending = null; this.render(); break;
       case 'clear': await this.clear(el.dataset.what as NonNullable<State['armed']>); break;
+      case 'detail-clear': this.detailFilter = emptyDetailFilter(); this.renderMain(); break;
+      case 'export': this.exportCsv(el.dataset.what ?? ''); break;
       case 'settings-save': await this.saveRules(); break;
       default: break;
     }
@@ -323,17 +332,13 @@ export class App {
     const stats = snap.stats;
     const visible = this.visible();
     const counts: Record<Status, number> = { ok: 0, legacy: 0, bad: 0, nv: 0, unk: 0 };
-    const seen = new Set<string>();
-    for (const fact of visible) {
-      const key = `${fact.ds}|${fact.server}${fact.serverVersion}${fact.driverVersion}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      counts[statusOf(fact, s.catalog)]++;
-    }
-    const known = Object.keys(s.catalog).length > 0;
-    box.innerHTML = `<div class="kpi"><b>${stats.oracleDatasources}</b><span>datasources Oracle</span></div>
-      <div class="kpi"><b>${percent(stats.oracleWithDriver, stats.oracleDatasources)}</b><span>com driver resolvido</span></div>
-      ${known ? `<div class="kpi ok"><b>${counts.ok}</b><span>certificadas</span></div><div class="kpi warn"><b>${counts.legacy}</b><span>fora de suporte</span></div><div class="kpi bad"><b>${counts.bad}</b><span>sem certificação</span></div>` : '<div class="kpi"><b>0</b><span>bancos com versão</span></div>'}`;
+    for (const { fact } of groupDatasources(visible, s.catalog)) counts[statusOf(fact, s.catalog)]++;
+    const oracle = groupDatasources(snap.facts.filter((f) => f.dbType === 'Oracle'), s.catalog);
+    const rated = counts.ok + counts.legacy + counts.bad + counts.nv + counts.unk;
+    const known = hasDbVersions(visible, s.catalog);
+    box.innerHTML = `<div class="kpi"><b>${stats.hosts}</b><span>hosts coletados</span></div>
+      <div class="kpi"><b>${oracle.length}</b><span>datasources Oracle</span></div>
+      ${s.tab !== 'matrix' ? '' : known ? `<div class="kpi ok"><b>${counts.ok}</b><span>certificadas</span><small>de ${rated}</small></div><div class="kpi warn"><b>${counts.legacy}</b><span>fora de suporte</span><small>de ${rated}</small></div><div class="kpi bad"><b>${counts.bad}</b><span>sem certificação</span><small>de ${rated}</small></div><div class="kpi"><b>${counts.nv + counts.unk}</b><span>banco sem versão</span><small>de ${rated}</small></div>` : '<div class="kpi"><b>0</b><span>bancos com versão</span></div>'}`;
   }
 
   private renderAside(): void {
@@ -352,18 +357,51 @@ export class App {
     if (s.tab === 'data' || !s.current) { main.innerHTML = notice + renderData(s); return; }
     const facts = this.visible();
     if (s.tab === 'map') {
-      const banner = Object.keys(s.catalog).length === 0
-        ? '<div class="banner"><b>Versão do banco ausente.</b> A exportação traz host, porta e serviço, mas não a versão. Cole o catálogo ao lado para ver a camada de compatibilidade.</div>'
-        : s.catalogSimulated ? '<div class="banner sim"><b>Versões de banco simuladas</b> para demonstração; não foram salvas.</div>' : '';
+      const cmdb = this.facts.filter((f) => f.dbType === 'Oracle' && (f.dbVersions?.length ?? 0) > 0);
+      const multi = new Set(cmdb.filter((f) => (f.dbVersions?.length ?? 0) > 1).map((f) => f.ds)).size;
+      const banner = !hasDbVersions(this.facts, s.catalog)
+        ? '<div class="banner"><b>Versão do banco ausente.</b> A exportação não traz a versão. Cole o catálogo ao lado para ver a camada de compatibilidade.</div>'
+        : Object.keys(s.catalog).length === 0 && !s.catalogSimulated
+          ? `<div class="banner"><b>Versões do banco vindas do CMDB.</b> ${multi > 0 ? `${multi} datasources têm mais de uma versão listada; a situação usa o pior caso. ` : ''}Para fixar a versão de um banco, use o catálogo ao lado (ele tem prioridade).</div>`
+          : s.catalogSimulated ? '<div class="banner sim"><b>Versões de banco simuladas</b> para demonstração; não foram salvas.</div>' : '';
       main.innerHTML = `${notice}${banner}<div class="legend"><span><i style="background:var(--ok)"></i>certificado (Yes)</span><span><i style="background:var(--legacy)"></i>certificado, mas uma versão saiu do suporte (Was)</span><span><i style="background:var(--bad)"></i>sem certificação da Oracle</span><span><i style="background:var(--neu)"></i>versão do banco desconhecida</span><span class="mut">clique em um nó para destacar o caminho</span></div>
         <div class="card" id="stage"></div><div class="card" style="margin-top:12px" id="detail"></div>`;
       const stage = main.querySelector('#stage') as HTMLElement;
       const render = renderMap(s, facts, Math.max(900, stage.clientWidth - 24));
       stage.innerHTML = render.html;
-      (main.querySelector('#detail') as HTMLElement).innerHTML = renderDetail(render.selected ?? facts, s.catalog, render.selected !== null);
+      this.detailBase = render.selected ?? facts;
+      this.detailFocused = render.selected !== null;
+      (main.querySelector('#detail') as HTMLElement).innerHTML = `${renderDetailToolbar()}<div id="detail-body"></div>`;
+      this.paintDetail();
       this.indexTips(render.model.nodes.flat(), render.model.links);
     } else if (s.tab === 'matrix') main.innerHTML = `${notice}<div class="card">${renderMatrix(s, facts)}</div>`;
     else main.innerHTML = `${notice}<div class="card">${renderPlan(facts, s.catalog)}</div>`;
+  }
+
+  /** Redesenha só as tabelas abaixo do mapa, para o campo de filtro manter o foco. */
+  private paintDetail(): void {
+    const body = this.root.querySelector<HTMLElement>('#detail-body');
+    if (!body) return;
+    const rows = filterDetail(this.detailBase, this.detailFilter, this.state.catalog);
+    const active = document.activeElement as HTMLInputElement | null;
+    const keep = active && body.contains(active) ? { df: active.dataset.df, start: active.selectionStart, end: active.selectionEnd } : null;
+    body.innerHTML = renderHosts(this.detailBase, this.state.catalog, this.detailFilter, this.detailFocused) + renderDetail(rows, this.state.catalog, this.detailFocused);
+    if (keep?.df) {
+      const next = body.querySelector<HTMLInputElement>(`[data-df="${keep.df}"]`);
+      next?.focus();
+      if (next && keep.start !== null && next.type === 'text') next.setSelectionRange(keep.start, keep.end);
+    }
+  }
+
+  private exportCsv(what: string): void {
+    const rows = filterDetail(this.detailBase, this.detailFilter, this.state.catalog);
+    const hosts = what === 'hosts';
+    const blob = new Blob([hosts ? hostsCsv(rows, this.state.catalog) : datasourcesCsv(rows, this.state.catalog)], { type: 'text/csv;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `jdbcmap-${hosts ? 'maquinas' : 'datasources'}-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
   }
 
   private indexTips(nodes: { key: string; weight: number; facts: Fact[] }[], links: { from: { key: string }; to: { key: string }; weight: number }[]): void {

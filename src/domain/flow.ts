@@ -1,4 +1,4 @@
-import { jdkMajor, shortHost, statusOf } from './analysis';
+import { dbVersionLabel, dbVersionsOf, jdkMajor, statusOf } from './analysis';
 import type { Catalog, Fact, Status } from './types';
 
 export type Column = 'os' | 'server' | 'jdk' | 'driver' | 'db';
@@ -24,12 +24,9 @@ export function groupKey(column: Column, fact: Fact, catalog: Catalog): string {
     }
     case 'driver':
       return fact.driverVersion ? `${fact.jar ?? 'JDBC'} ${fact.driverVersion}` : 'Driver não resolvido';
-    case 'db': {
-      const host = shortHost(fact.dbHost);
-      if (!host) return 'Banco não identificado';
-      const version = catalog[host];
-      return version ? `${host} · ${version}` : host;
-    }
+    case 'db':
+      // Só a versão: bancos de mesma versão (ou mesma combinação, ex. 18c/19c) caem no mesmo nó.
+      return dbVersionLabel(dbVersionsOf(fact, catalog)) ?? 'Versão não identificada';
   }
 }
 

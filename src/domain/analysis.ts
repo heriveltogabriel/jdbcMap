@@ -47,7 +47,7 @@ function compareParts(a: number[], b: number[]): number {
 }
 
 /** Problemas do servidor com o JDK e com o banco, segundo a certificação do My Oracle Support (src/rules/weblogic.json), ou null. */
-export function serverIssue(fact: Pick<Fact, 'server' | 'serverVersion' | 'jdk' | 'dbHost'>, catalog: Catalog = {}): string | null {
+export function serverIssue(fact: Pick<Fact, 'server' | 'serverVersion' | 'jdk' | 'dbHost' | 'dbVersions'>, catalog: Catalog = {}): string | null {
   if (fact.server !== 'WebLogic') return null;
   const rule = weblogicRule(fact.serverVersion);
   if (!rule) return null;
@@ -64,9 +64,9 @@ export function serverIssue(fact: Pick<Fact, 'server' | 'serverVersion' | 'jdk' 
       if (parts.length > 2 && compareParts(parts, jdkParts(lowest.version)) < 0) issues.push(`WebLogic ${rule.version} exige JDK ${major} a partir da ${lowest.version}; este roda ${fact.jdk}.`);
     }
   }
-  const db = catalog[shortHost(fact.dbHost) ?? ''];
   const dbs = certifiedDbs(rule, normalizeDbVersion);
-  if (db && dbs.size > 0 && !dbs.has(db)) issues.push(`O My Oracle Support não lista o banco ${db} para o WebLogic ${rule.version} (lista ${DB_VERSIONS.filter((v) => dbs.has(v)).join(', ')}).`);
+  const outside = dbs.size > 0 ? dbVersionsOf(fact, catalog).filter((v) => !dbs.has(v)) : [];
+  if (outside.length > 0) issues.push(`O My Oracle Support não lista o banco ${outside.join('/')} para o WebLogic ${rule.version} (lista ${DB_VERSIONS.filter((v) => dbs.has(v)).join(', ')}).`);
   return issues.length > 0 ? issues.join(' ') : null;
 }
 
@@ -98,6 +98,34 @@ export function shortHost(host: string | null | undefined): string | null {
   return /^\d+(\.\d+){3}$/.test(trimmed) ? trimmed : (trimmed.split('.')[0] ?? null);
 }
 
+const WORST: readonly Status[] = ['bad', 'legacy', 'ok', 'nv', 'unk'];
+
+/** Versões do banco de uma conexão: o catálogo manual vale sozinho; sem ele, as do CMDB (podem ser várias). */
+export function dbVersionsOf(fact: Pick<Fact, 'dbHost' | 'dbVersions'>, catalog: Catalog): DbVersion[] {
+  const manual = catalog[shortHost(fact.dbHost) ?? ''];
+  return manual ? [manual] : (fact.dbVersions ?? []);
+}
+
+/** Rótulo curto das versões ("19c" ou "18c/19c"), ou null sem versão. */
+export function dbVersionLabel(versions: readonly DbVersion[]): string | null {
+  return versions.length > 0 ? versions.join('/') : null;
+}
+
+/** Alguma conexão do conjunto tem versão de banco (catálogo ou CMDB)? */
+export function hasDbVersions(facts: readonly Fact[], catalog: Catalog): boolean {
+  return Object.keys(catalog).length > 0 || facts.some((fact) => (fact.dbVersions?.length ?? 0) > 0);
+}
+
+/** Bancos distintos (host curto) com versão conhecida, por catálogo ou CMDB. */
+export function hostsWithVersion(facts: readonly Fact[], catalog: Catalog): Set<string> {
+  const hosts = new Set<string>();
+  for (const fact of facts) {
+    const host = shortHost(fact.dbHost);
+    if (host && dbVersionsOf(fact, catalog).length > 0) hosts.add(host);
+  }
+  return hosts;
+}
+
 export interface CatalogParse {
   catalog: Catalog;
   /** Linhas ignoradas, com o número da linha (1 = primeira). */
@@ -124,9 +152,18 @@ export function parseCatalog(text: string): CatalogParse {
 export function statusOf(fact: Fact, catalog: Catalog): Status {
   const line = factLine(fact);
   if (!line) return 'unk';
-  const key = shortHost(fact.dbHost);
-  const db = key ? catalog[key] : undefined;
-  return db ? compatOf(line, db) : 'unk';
+  return worstOf(dbVersionsOf(fact, catalog).map((db) => compatOf(line, db)));
+}
+
+/** Pior situação da lista (bad > legacy > ok > nv); 'unk' quando vazia. */
+function worstOf(statuses: Status[]): Status {
+  return WORST.find((status) => statuses.includes(status)) ?? 'unk';
+}
+
+/** A versão do banco que decide a situação: a de pior compatibilidade (a mais nova no empate). */
+function decisiveDb(fact: Fact, line: DriverLine, catalog: Catalog): DbVersion | undefined {
+  const versions = dbVersionsOf(fact, catalog);
+  return [...versions].sort((a, b) => WORST.indexOf(compatOf(line, a)) - WORST.indexOf(compatOf(line, b)) || DB_VERSIONS.indexOf(b) - DB_VERSIONS.indexOf(a))[0];
 }
 
 /** Linha da matriz (jar + release) onde a conexão está hoje. */
@@ -167,7 +204,8 @@ function jarAdvice(fact: Fact): string | null {
 function driverAdvice(fact: Fact, catalog: Catalog): string | null {
   const line = factLine(fact);
   if (!line) return jarAdvice(fact);
-  const db = catalog[shortHost(fact.dbHost) ?? ''];
+  const db = decisiveDb(fact, line, catalog);
+  const all = dbVersionsOf(fact, catalog);
   const jdk = jdkMajor(fact.jdk);
   if (jdk !== null && jdk < 8) return oldJdkAdvice(jdk, db);
   const jar = jdk === null || jdk <= 8 ? 'ojdbc8' : jdk <= 11 ? 'ojdbc11' : 'ojdbc17';
@@ -177,11 +215,12 @@ function driverAdvice(fact: Fact, catalog: Catalog): string | null {
   }
   const status = statusOf(fact, catalog);
   if (status === 'ok') return null;
-  if (status === 'nv') return `Combinação não verificada nas docs da Oracle (driver ${line} com banco ${db}). Conferir antes de decidir.`;
+  const mixed = all.length > 1 ? ` O CMDB lista mais de uma versão para este banco (${all.join('/')}); avaliado o pior caso, confirme qual o datasource usa.` : '';
+  if (status === 'nv') return `Combinação não verificada nas docs da Oracle (driver ${line} com banco ${db}). Conferir antes de decidir.${mixed}`;
   const high = db === '21c' || db === '23ai' || db === '26ai';
   const target = high ? `${jar} 26ai/23.26+ (certificado com 19c, 21c e 26ai)` : 'ojdbc8 19.x (certificado com 19c, 21c e 26ai)';
-  if (status === 'bad') return `Sem certificação: a Oracle não certifica este driver com o banco ${db} (pode conectar, mas sem suporte). Usar ${target}.`;
-  return `Combinação em “Was” (uma versão fora do suporte). Alinhar para ${target}${/^(11|12|18)/.test(db) ? ' e planejar a atualização do banco' : ''}.`;
+  if (status === 'bad') return `Sem certificação: a Oracle não certifica este driver com o banco ${db} (pode conectar, mas sem suporte). Usar ${target}.${mixed}`;
+  return `Combinação em “Was” (uma versão fora do suporte). Alinhar para ${target}${/^(11|12|18)/.test(db) ? ' e planejar a atualização do banco' : ''}.${mixed}`;
 }
 
 export const RANGES: readonly { label: string; lines: readonly DriverLine[] }[] = [
@@ -248,8 +287,7 @@ export function matrixCounts(facts: Fact[], catalog: Catalog): { total: Map<stri
     const row = matrixRowOf(fact);
     if (!row) continue;
     total.set(row.id, (total.get(row.id) ?? 0) + 1);
-    const db = catalog[shortHost(fact.dbHost) ?? ''];
-    if (db) cell.set(`${row.id}|${db}`, (cell.get(`${row.id}|${db}`) ?? 0) + 1);
+    for (const db of dbVersionsOf(fact, catalog)) cell.set(`${row.id}|${db}`, (cell.get(`${row.id}|${db}`) ?? 0) + 1);
   }
   return { total, cell };
 }
@@ -260,10 +298,31 @@ export interface MigrationTarget {
   covers: DbVersion[];
   /** Bancos em uso que ela não cobre; exigem atualizar o banco. */
   missing: DbVersion[];
+  /** Conexões da linha de origem que migram sem trocar JDK nem servidor, e o total considerado (0 sem fatos). */
+  ok: number;
+  total: number;
+  /** O que impede a migração de parte das conexões: JDK do servidor ou banco que o servidor não certifica. */
+  blockers: string[];
+  /** Serve de destino: há conexões que migram (ou, sem fatos da origem, bancos cobertos). */
+  usable: boolean;
 }
 
-/** Para uma linha selecionada, quais outras linhas são certificadas para os bancos que ela atende hoje. */
-export function migrationTargets(selectedId: string, cell: Map<string, number>, hasCatalog: boolean): MigrationTarget[] {
+/** Versões de JDK que o jar suporta, lidas do texto da matriz ("JDK 6 a 8", "JDK 8, 11, 17, 19 e 21"). */
+function jdkSupport(text: string): Set<number> {
+  const nums = [...text.matchAll(/\d+/g)].map((m) => Number(m[0]));
+  const first = nums[0];
+  const last = nums[nums.length - 1];
+  if (nums.length === 2 && first !== undefined && last !== undefined && / a /.test(text)) {
+    return new Set(Array.from({ length: last - first + 1 }, (_, i) => first + i));
+  }
+  return new Set(nums);
+}
+
+/**
+ * Para uma linha selecionada, quais outras linhas servem de destino. Leva em conta o banco (certificação do driver),
+ * o JDK em que o servidor roda (o jar precisa suportá-lo) e, no WebLogic, os bancos que o My Oracle Support certifica para a versão.
+ */
+export function migrationTargets(selectedId: string, cell: Map<string, number>, hasCatalog: boolean, rowFacts: Fact[] = [], catalog: Catalog = {}): MigrationTarget[] {
   const selected = MATRIX_ROWS.find((row) => row.id === selectedId);
   if (!selected) return [];
   const inUse = DB_VERSIONS.filter((db) => (hasCatalog ? (cell.get(`${selectedId}|${db}`) ?? 0) > 0 : compatOf(selected.line, db) !== 'bad'));
@@ -272,7 +331,22 @@ export function migrationTargets(selectedId: string, cell: Map<string, number>, 
   for (const row of MATRIX_ROWS) {
     if (row.id === selectedId) continue;
     const covers = need.filter((db) => compatOf(row.line, db) === 'ok');
-    if (covers.length > 0) targets.push({ rowId: row.id, covers, missing: need.filter((db) => !covers.includes(db)) });
+    const supported = jdkSupport(row.jdk);
+    const blockers = new Set<string>();
+    let ok = 0;
+    for (const fact of rowFacts) {
+      const jdk = jdkMajor(fact.jdk);
+      const label = fact.server === 'Sem servidor' ? fact.server : `${fact.server} ${fact.serverVersion}`;
+      if (jdk !== null && !supported.has(jdk)) { blockers.add(`${label} roda JDK ${jdk}; o ${row.jar} suporta ${row.jdk.replace('JDK ', 'JDK ')}`); continue; }
+      const dbs = (hasCatalog ? dbVersionsOf(fact, catalog) : []).length > 0 ? dbVersionsOf(fact, catalog) : need;
+      const rule = fact.server === 'WebLogic' ? weblogicRule(fact.serverVersion) : null;
+      const certified = rule ? certifiedDbs(rule, normalizeDbVersion) : null;
+      const noServer = certified && certified.size > 0 ? dbs.filter((db) => !certified.has(db)) : [];
+      if (noServer.length > 0) { blockers.add(`${label} não certifica o banco ${noServer.join('/')} (My Oracle Support)`); continue; }
+      if (dbs.every((db) => compatOf(row.line, db) === 'ok')) ok++;
+    }
+    const usable = rowFacts.length > 0 ? ok > 0 : covers.length > 0;
+    targets.push({ rowId: row.id, covers, missing: need.filter((db) => !covers.includes(db)), ok, total: rowFacts.length, blockers: [...blockers], usable });
   }
   return targets;
 }

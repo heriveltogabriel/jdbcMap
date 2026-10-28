@@ -34,6 +34,10 @@ export interface Fact {
   /** Estado de resolução do coletor (IDENTIFIED, INCOMPLETE...) ou SEM_RESOLUCAO. */
   resolution: string;
   resolutionReason: string | null;
+  /** Versões do banco que o CMDB lista para o host (normalizadas, sem repetir). Vazio quando não identificada; ausente em coletas antigas. */
+  dbVersions?: DbVersion[];
+  /** Situação da busca no CMDB: unica, multiplas, nao_identificada, host_nao_informado (ou ausente). */
+  dbVersionStatus?: string;
 }
 
 export interface SnapshotMeta {
@@ -59,6 +63,8 @@ export interface SnapshotStats {
   envMismatch: number;
   /** Datasources Oracle sem versão de driver, por motivo. */
   unresolved: Record<string, number>;
+  /** Datasources Oracle por situação da versão do banco no CMDB; ausente em coletas sem esses campos. */
+  dbVersions?: { single: number; multiple: number; unidentified: number; noHost: number };
 }
 
 export interface Snapshot extends SnapshotMeta {

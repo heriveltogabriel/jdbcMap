@@ -17,7 +17,8 @@ describe('buildFlow', () => {
     const [wl] = facts;
     expect(wl && groupKey('driver', wl, {})).toBe('ojdbc6 11.2.0.4.0');
     expect(wl && groupKey('jdk', wl, {})).toBe('JDK 8');
-    expect(wl && groupKey('db', wl, { dbscan1: '19c' })).toBe('dbscan1 · 19c');
+    expect(wl && groupKey('db', wl, { dbscan1: '19c' })).toBe('19c');
+    expect(wl && groupKey('db', wl, {})).toBe('Versão não identificada');
   });
   it('agrupa os menores em "Outros" acima do limite', () => {
     const many = Array.from({ length: 30 }, (_, i) => ({ ...facts[0]!, driverVersion: `19.${i}.0.0.0`, ds: `d${i}` }));

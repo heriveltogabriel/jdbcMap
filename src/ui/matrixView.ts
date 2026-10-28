@@ -1,4 +1,5 @@
-import { matrixCounts, matrixRowOf, migrationTargets } from '../domain/analysis';
+import type { MigrationTarget } from '../domain/analysis';
+import { hasDbVersions, matrixCounts, matrixRowOf, migrationTargets, statusOf } from '../domain/analysis';
 import type { Fact } from '../domain/types';
 import type { MatrixRow } from '../rules/compat';
 import { DB_VERSIONS, INFERRED, JAR_JDBC, JAR_NOTES, MATRIX, MATRIX_ROWS, RULES_INFO, WEBLOGIC_NOTES } from '../rules/compat';
@@ -17,9 +18,13 @@ const TITLE = {
 export function renderMatrix(state: State, facts: Fact[]): string {
   const withLine = facts.filter((fact) => fact.driverVersion);
   const { total, cell } = matrixCounts(withLine, state.catalog);
-  const known = Object.keys(state.catalog).length > 0;
+  const known = hasDbVersions(withLine, state.catalog);
   const selected = state.matrixSelection;
-  const targets = new Map((selected ? migrationTargets(selected, cell, known) : []).map((t) => [t.rowId, t]));
+  const rowFacts = new Map<string, Fact[]>();
+  for (const fact of withLine) {
+    const id = matrixRowOf(fact)?.id;
+    if (id) rowFacts.set(id, [...(rowFacts.get(id) ?? []), fact]);
+  }
 
   const versions = new Map<string, Set<string>>();
   const servers = new Map<string, Map<string, { label: string; jdk: string; count: number }>>();
@@ -47,22 +52,22 @@ export function renderMatrix(state: State, facts: Fact[]): string {
   const visibleRows: MatrixRow[] = [];
   for (const row of MATRIX_ROWS) {
     const isSelected = selected === row.id;
-    const target = targets.get(row.id);
-    // Com filtro ativo, linhas sem nenhuma conexão só ficam se forem a selecionada ou um destino de migração.
-    if (narrowed && !total.get(row.id) && !isSelected && !target) continue;
+    const mine = rowFacts.get(row.id) ?? [];
+    const summary = mine.length > 0 ? migrateSummary(row.id, cell, known, mine, state) : '';
+    // Com filtro ativo, linhas sem nenhuma conexão só ficam se forem a selecionada.
+    if (narrowed && !total.get(row.id) && !isSelected) continue;
     visibleRows.push(row);
     const note = JAR_NOTES[row.jar];
-    html += `<tr class="${isSelected ? 'row-sel' : ''}${target ? ' row-tgt' : ''}"><th class="rl srv qty" data-action="matrix-row" data-row="${esc(row.id)}">${serversLine(servers.get(row.id), 'count')}</th><th class="rl srv" data-action="matrix-row" data-row="${esc(row.id)}">${serversLine(servers.get(row.id), 'label')}</th><th class="rl srv jdk" data-action="matrix-row" data-row="${esc(row.id)}">${serversLine(servers.get(row.id), 'jdk')}</th><th class="rl" data-action="matrix-row" data-row="${esc(row.id)}">${esc(row.jar)} <span class="mut" style="font-weight:400">· ${esc(row.release)}</span><small>${esc(row.jdk)}${note ? ` · ${esc(note)}` : ''}</small>${versionsLine(versions.get(row.id))}</th>`;
+    html += `<tr class="${isSelected ? 'row-sel' : ''}"><th class="rl srv qty" data-action="matrix-row" data-row="${esc(row.id)}">${serversLine(servers.get(row.id), 'count')}</th><th class="rl srv" data-action="matrix-row" data-row="${esc(row.id)}">${serversLine(servers.get(row.id), 'label')}</th><th class="rl srv jdk" data-action="matrix-row" data-row="${esc(row.id)}">${serversLine(servers.get(row.id), 'jdk')}</th><th class="rl" data-action="matrix-row" data-row="${esc(row.id)}">${esc(row.jar)} <span class="mut" style="font-weight:400">· ${esc(row.release)}</span><small>${esc(row.jdk)}${note ? ` · ${esc(note)}` : ''}</small>${versionsLine(versions.get(row.id))}</th>`;
     DB_VERSIONS.forEach((db, index) => {
       const compat = MATRIX[row.line][index] ?? 'bad';
       const count = cell.get(`${row.id}|${db}`) ?? 0;
       const inferred = INFERRED.has(`${row.line}|${db}`);
       html += `<td class="c ${compat}${count ? ' cur' : ''}" title="${esc(TITLE[compat])}${inferred ? ' · não consta literalmente nas docs lidas' : ''}">${SYMBOL[compat]}${inferred ? '<sup style="font-size:10px">*</sup>' : ''}${count ? `<span class="n">${count}</span>` : ''}</td>`;
     });
-    const covers = target ? `<span class="tg ${target.missing.length ? '' : 'best'}">${target.missing.length ? 'cobre ' : 'cobre todos: '}${target.covers.map(esc).join(', ')}</span>${target.missing.length ? `<div class="mut" style="font-size:11px">${target.missing.map(esc).join(', ')}: exige atualizar o banco</div>` : ''}` : '';
-    html += `<td class="hoje">${total.get(row.id) ?? '<span class="mut">·</span>'}</td><td>${isSelected ? '<span class="mut">linha selecionada</span>' : covers}</td></tr>`;
+    html += `<td class="hoje">${total.get(row.id) ?? '<span class="mut">·</span>'}</td><td>${summary}</td></tr>`;
   }
-  html += `</table><p class="sub">Clique em uma linha para ver, nas outras, quais drivers são certificados (✓) para os bancos que ela atende hoje. ${known ? 'Os bancos considerados são os do seu catálogo.' : 'Sem catálogo de versões, a conta usa todos os bancos que o driver suporta.'}
+  html += `</table><p class="sub">Em "Migrar para", cada linha mostra o destino que leva mais das suas conexões sem trocar o JDK nem o servidor (certificação do driver, JDK que o jar suporta e, no WebLogic, os bancos do My Oracle Support). Clique em uma linha para destacá-la. ${known ? 'Os bancos considerados são os do seu catálogo.' : 'Sem catálogo de versões, a conta usa todos os bancos que o driver suporta.'}
   Fonte: tabelas de interoperabilidade dos JDBC Developer's Guide 19c, 21c e 26ai da Oracle, lidas em ${esc(RULES_INFO.readAt)}. *: cruzamento que não consta literalmente nas docs lidas. ?: nenhuma das docs lidas cobre a combinação.</p>
   <p class="sub"><b>WebLogic:</b> ${WEBLOGIC_NOTES.map(esc).join(' ')} A matriz completa do WebLogic exige login no My Oracle Support.</p>
   <p class="sub"><b>Fonte das regras do WebLogic:</b> ${esc(RULES_INFO.weblogicSource)} ${esc(RULES_INFO.weblogicLimit)}</p>`;
@@ -112,4 +117,23 @@ function guide(rows: readonly MatrixRow[], total: Map<string, number>): string {
   <table class="ref">
     <tr><th>Jar</th><th>Release</th><th>Roda em</th><th>JDBC</th><th style="text-align:right">Conexões hoje</th></tr>${body}
   </table></div>`;
+}
+
+/** "Migrar para" de uma linha: o destino que leva mais conexões dela sem trocar JDK ou servidor, e o que trava o resto. */
+function migrateSummary(rowId: string, cell: Map<string, number>, known: boolean, facts: Fact[], state: State): string {
+  const small = (text: string) => `<div class="mut" style="font-size:11px">${esc(text)}</div>`;
+  if (facts.every((fact) => statusOf(fact, state.catalog) === 'ok')) return '<span class="mut">certificado, nada a migrar</span>';
+  const targets = migrationTargets(rowId, cell, known, facts, state.catalog);
+  const best = targets.filter((t) => t.usable).reduce<MigrationTarget | null>((top, t) => (top === null || t.ok > top.ok ? t : top), null);
+  if (!best) {
+    const ref = targets.find((t) => t.rowId === 'ojdbc8|19') ?? targets[0];
+    return `<span class="mut" style="font-size:11px">sem destino:</span>${(ref?.blockers ?? ['nenhum driver tem ✓ para os bancos em uso']).map(small).join('')}`;
+  }
+  const row = MATRIX_ROWS.find((r) => r.id === best.rowId);
+  const all = best.total > 0 && best.ok === best.total && best.missing.length === 0;
+  return `<span class="tg ${all ? 'best' : ''}">${esc(row ? `${row.jar} ${row.release}` : best.rowId)}</span>`
+    + `<div class="mut" style="font-size:11px">${all ? 'cobre todos' : 'cobre'}: ${best.covers.map(esc).join(', ')}</div>`
+    + (best.total > 0 && best.ok < best.total ? small(`${best.ok} de ${best.total} conexões migram sem trocar JDK ou servidor`) : '')
+    + (best.missing.length ? small(`${best.missing.join(', ')}: exige atualizar o banco`) : '')
+    + best.blockers.map(small).join('');
 }
